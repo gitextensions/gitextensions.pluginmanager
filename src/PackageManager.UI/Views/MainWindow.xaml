@@ -1,0 +1,52 @@
+﻿<Window x:Class="PackageManager.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:PackageManager.Views.Controls"
+        xmlns:converters="clr-namespace:PackageManager.Views.Converters"
+        xmlns:views="clr-namespace:PackageManager.Views"
+        mc:Ignorable="d" d:DataContext="{x:Static dd:ViewModelLocator.Main}"
+        Title="Packages" Height="600" Width="800" Icon="{StaticResource AppIcon}" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converters:ValidUrlToTrueConverter x:Key="ValidUrlToTrueConverter" />
+    </Window.Resources>
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Margin="8,0,0,8">
+                <Label Content="Package Source:" />
+                <ComboBox ItemsSource="{Binding SourceSelector.SourceNames}" SelectedItem="{Binding SourceSelector.SelectedName}" />
+            </StackPanel>
+
+            <Button x:Name="PackageSourceSettings" controls:Button.Image="{StaticResource SettingsIcon}" ToolTip="Package Source Settings"
+             Click="PackageSourceSettings_Click" Margin="8" VerticalAlignment="Bottom" Grid.Column="1" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <TabControl x:Name="Tabs" controls:TabControl.IsAutoFocus="True">
+                <TabItem Header="Browse" Padding="8,4">
+                    <views:Browser x:Name="Browser" ViewModel="{Binding Browser}" />
+                </TabItem>
+                <TabItem Header="Installed">
+                    <views:Installed x:Name="Installed" ViewModel="{Binding Installed}" />
+                </TabItem>
+                <TabItem Header="Updates">
+                    <views:Updates x:Name="Updates" ViewModel="{Binding Updates}" />
+                </TabItem>
+            </TabControl>
+            <Button x:Name="ShowLog" Content="Log" Click="ShowLog_Click" Style="{StaticResource LinkButtonStyle}" Margin="10,4" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        </Grid>
+        <views:Loading CancelCommand="{Binding Cancel}" Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisibleConverter}}" Grid.RowSpan="2" />
+    </Grid>
+</Window>

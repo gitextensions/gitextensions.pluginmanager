@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PackageManager</RootNamespace>
+    <AssemblyName>PackageManager.UI</AssemblyName>
+    <TargetFramework>net461</TargetFramework>
+    <ApplicationIcon>Views\Assets\box-search-result.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Assets\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="3.1.6" />
+    <PackageReference Include="Neptuo.Exceptions" Version="1.2.1" />
+    <PackageReference Include="Neptuo.Observables" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PackageManager.NuGet\PackageManager.NuGet.csproj" />
+    <ProjectReference Include="..\PackageManager\PackageManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)\..\..\build\Wpf.Build.targets" />
+
+  <Target Name="Zip" AfterTargets="Pack">
+    <Exec Command="powershell $(MSBuildProjectDirectory)\..\..\tools\Zip-PackageManager.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
+  </Target>
+</Project>
