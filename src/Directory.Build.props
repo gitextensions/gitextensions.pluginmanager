@@ -1,0 +1,13 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+    <Authors>GitExtensions</Authors>
+    <Company>GitExtensions</Company>
+    <RepositoryUrl>https://github.com/gitextensions/gitextensions.pluginmanager</RepositoryUrl>
+    <LangVersion>latest</LangVersion>
+
+    <VersionPrefix>0.9.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+  </PropertyGroup>
+
+</Project>

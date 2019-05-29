@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="PackageManager.Views.Updates"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Updates}}" Background="White">
+    <DockPanel x:Name="MainPanel">
+        <Grid DockPanel.Dock="Top">
+            <StackPanel Margin="8" Orientation="Horizontal">
+                <Button Command="{Binding Refresh}" Style="{StaticResource RefreshButtonStyle}" />
+                <CheckBox Content="Include _Prerelease" IsChecked="{Binding IsPrereleaseIncluded}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0" />
+            </StackPanel>
+            <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Update All" Command="{Binding UpdateAll}" Margin="8,0,0,0" />
+            </StackPanel>
+        </Grid>
+
+        <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" HorizontalContentAlignment="Stretch" Margin="8,0,8,8" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="8">
+                        <DockPanel>
+                            <Image Source="{Binding Target.IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0,0,0" DockPanel.Dock="Right">
+                                <Button Content="Update" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=DataContext.Update}" CommandParameter="{Binding}" Margin="0,0,8,0" />
+
+                                <Button Content="Other versions.." Command="{Binding Current.LoadVersions}" Visibility="{Binding Current.AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                                <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Current.Versions}" SelectedValue="{Binding Target, Mode=TwoWay}" SelectedValuePath="Model" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
+                                 Visibility="{Binding Current.AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                            </StackPanel>
+                            <StackPanel>
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Target.Id}" FontWeight="Bold" />
+                                        <TextBlock Text=" (PackageManager update)" Visibility="{Binding IsSelf, Converter={StaticResource TrueToVisibleConverter}}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <TextBlock Text="v" />
+                                        <TextBlock Text="{Binding Current.Version}" />
+                                        <TextBlock Text=" → " />
+                                        <TextBlock Text="v" />
+                                        <TextBlock Text="{Binding Target.Version}" />
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="{Binding Target.Description, Converter={StaticResource DropNewLineConverter}}" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </DockPanel>
+</UserControl>

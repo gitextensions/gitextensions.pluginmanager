@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\PackageManager.UI\Args.cs" Link="Services\Args.cs" />
+    <Compile Include="..\..\src\PackageManager.UI\Models\NuGetFrameworkFilter.cs" Link="Services\NuGetFrameworkFilter.cs" />
+    <Compile Include="..\..\src\PackageManager.UI\Services\DependencyNuGetPackageFilter.cs" Link="Services\DependencyNuGetPackageFilter.cs" />
+    <Compile Include="..\PackageManager.Tests\ViewModels\Commands\CallCounter.cs" Link="Services\CallCounter.cs" />
+    <Compile Include="..\PackageManager.Tests\ViewModels\Commands\Package.cs" Link="Services\Package.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PackageManager.NuGet\PackageManager.NuGet.csproj" />
+    <ProjectReference Include="..\..\src\PackageManager\PackageManager.csproj" />
+  </ItemGroup>
+
+</Project>
