@@ -26,7 +26,7 @@ if (Test-Path $DownloadFilePath)
 	exit;
 }
 
-Write-Host ('Searching for GitExtensions release on "' + $Source + '".');
+Write-Host ('Searching for Git Extensions release on "' + $Source + '".');
 
 if ($Source -eq "github")
 {

@@ -13,7 +13,7 @@ namespace GitExtensions.PluginManager
         /// <summary>
         /// Gets a property holding if asking to close git extensions is required.
         /// </summary>
-        public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of GitExtensions before starting PluginManager", false);
+        public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of Git Extensions before starting PluginManager", false);
 
         private readonly ISettingsSource source;
 

@@ -30,7 +30,7 @@ namespace PackageManager.Services
             var packageFilter = new DependencyNuGetPackageFilter(
                 new List<Args.Dependency>()
                 {
-                    new Args.Dependency("GitExtensions.Plugins", null)
+                    new Args.Dependency("GitExtensions.Extensibility", null)
                 },
                 frameworks
             );

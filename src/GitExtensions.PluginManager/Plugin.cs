@@ -16,7 +16,7 @@ using System.Windows.Forms;
 namespace GitExtensions.PluginManager
 {
     /// <summary>
-    /// GitExtensions plugin for backuping using bundles.
+    /// A Git Extensions plugin for integrating PackageManager.
     /// </summary>
     [Export(typeof(IGitPlugin))]
     public class Plugin : GitPluginBase
@@ -51,7 +51,7 @@ namespace GitExtensions.PluginManager
 
             Args args = new Args();
             args.Path = pluginsPath;
-            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Plugins") };
+            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility") };
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
             args.ProcessNamesToKillBeforeChange = new[] { Process.GetCurrentProcess().ProcessName };
