@@ -30,7 +30,7 @@ namespace PackageManager.Services
             var packageFilter = new DependencyNuGetPackageFilter(
                 new List<Args.Dependency>()
                 {
-                    new Args.Dependency("GitExtensions.Plugins", null)
+                    new Args.Dependency("GitExtensions.Extensibility", null)
                 },
                 frameworks
             );
@@ -45,7 +45,7 @@ namespace PackageManager.Services
                     frameworkFilter
                 ),
                 new DependencyNuGetPackageFilter(
-                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Plugins", null) },
+                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", null) },
                     frameworks
                 ),
                 new NuGetFrameworkFilter(frameworks)

@@ -38,10 +38,8 @@ if (!($LastExitCode -eq 0))
 }
 
 $packPath = Join-Path ".." $targetPath;
-dotnet pack ..\src\PackageManager.UI -c Release -o $packPath --no-build /p:VersionSuffix=$versionSuffix
 dotnet pack ..\src\GitExtensions.PluginManager -c Release -o $packPath --no-build /p:VersionSuffix=$versionSuffix
 
-Copy-Item ..\src\PackageManager.UI\bin\Release\*.zip $targetPath
 Copy-Item ..\src\GitExtensions.PluginManager\bin\Release\*.zip $targetPath
 
 Pop-Location;

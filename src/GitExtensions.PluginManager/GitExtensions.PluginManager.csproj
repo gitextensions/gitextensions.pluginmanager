@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <Description>NuGet-based Plugin Manager for GitExtensions</Description>
-    <PackageTags>Neptuo GitExtensions</PackageTags>
-    <PackageProjectUrl>http://www.neptuo.com/project/dev/gitextensions.pluginmanager</PackageProjectUrl>
+    <Description>NuGet-based Plugin Manager for Git Extensions</Description>
+    <PackageTags>GitExtensions</PackageTags>
+    <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NoWarn>1701;1702;NU5100</NoWarn>
@@ -12,7 +12,7 @@
 
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <PackageManagerSourcePath>$(SolutionDir)src\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
+    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
     <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\</GitExtensionsDebugPluginsPath>
     <GitExtensionsReferenceSource>appveyor</GitExtensionsReferenceSource>
     <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
@@ -53,8 +53,10 @@
   </ItemGroup>
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
     <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1 -Version $(GitExtensionsReferenceVersion) -Source $(GitExtensionsReferenceSource)" />
+  </Target>
+  <Target Name="CopyPackageManager" AfterTargets="ResolveReferences">
+    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
