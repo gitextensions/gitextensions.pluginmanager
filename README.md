@@ -8,7 +8,7 @@ Nightly builds of PluginManager available at Appveyor - https://ci.appveyor.com/
 
 ### Appveyor
 
-[![Build status](https://ci.appveyor.com/api/projects/status/k3y0frp1pgsyepwh?svg=true)](https://ci.appveyor.com/project/neptuo/gitextensions-pluginmanager)
+[![Build status](https://ci.appveyor.com/api/projects/status/cg2y7qojbugw7usg?svg=true)](https://ci.appveyor.com/project/gitextensions/gitextensions-pluginmanager)
 
 ### Browsing for packages
 PluginManager integrated into Git Extensions filters packages with dependency on `GitExtensions.Extensibility`. This package is right now a kind of meta package and it is used to mark nuget packages intended as Git Extensions plugins.
