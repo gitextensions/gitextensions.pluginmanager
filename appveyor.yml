@@ -60,15 +60,14 @@ artifacts:
 #     deployment configuration    #
 #---------------------------------#
 
-# Commented out as we need to create a new signing policy.
-# deploy:
-# - provider: Webhook
-#   on:
-#     ARTIFACT_SIGNING_ENABLED: true
-#   url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?SigningPolicyId=5c9879c7-0dea-4303-8e5b-fc4192a7b0de
-#   on_build_success: true
-#   on_build_failure: false
-#   on_build_status_changed: false
-#   method: POST
-#   authorization:
-#      secure: RdmJQ3LAsGIbtqbxlcn7wF8ESTbPSDiR0Fmyt11mDl+avSDd0HKexHA+sWQA3cN1K8aVnKTzvjGTQS8DSDmLzQ==
+deploy:
+- provider: Webhook
+  on:
+    ARTIFACT_SIGNING_ENABLED: true
+  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?SigningPolicyId=8a4ce84a-78d1-4fc0-8c0c-7cd51fb108c0
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
+  method: POST
+  authorization:
+     secure: RdmJQ3LAsGIbtqbxlcn7wF8ESTbPSDiR0Fmyt11mDl+avSDd0HKexHA+sWQA3cN1K8aVnKTzvjGTQS8DSDmLzQ==
