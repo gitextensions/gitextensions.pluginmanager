@@ -100,8 +100,10 @@ namespace PackageManager
 
             wnd.Show();
 
+            /*
             if (Args.IsSelfUpdate)
                 RunSelfUpdate(wnd);
+            */
         }
 
         private void BuildExceptionHandler()
