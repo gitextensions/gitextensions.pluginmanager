@@ -21,7 +21,6 @@ max_jobs: 1
 
 # Build worker image (VM template)
 image:
-- Visual Studio 2017
 - Visual Studio 2019
 
 # enable patching of Directory.Build.props
