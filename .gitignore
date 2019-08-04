@@ -290,3 +290,6 @@ __pycache__/
 
 references/
 *.zip
+
+# Git Extensions specific files
+GitExtensions.settings.backup
