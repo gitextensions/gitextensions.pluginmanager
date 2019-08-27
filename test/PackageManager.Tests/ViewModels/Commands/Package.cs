@@ -2,6 +2,7 @@
 using PackageManager.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,12 +21,12 @@ namespace PackageManager.ViewModels.Commands
         {
             Mock<IPackageContent> contentMock = new Mock<IPackageContent>();
             contentMock
-                .Setup(pc => pc.ExtractToAsync(It.Is<string>(s => s == extractPath), It.IsAny<CancellationToken>()))
+                .Setup(pc => pc.ExtractToAsync(It.Is<string>(s => s == Path.Combine(extractPath, id)), It.IsAny<CancellationToken>()))
                 .Callback(() => ExtractToAsyncCalled.Increment())
                 .Returns(() => Task.CompletedTask);
 
             contentMock
-                .Setup(pc => pc.RemoveFromAsync(It.Is<string>(s => s == extractPath), It.IsAny<CancellationToken>()))
+                .Setup(pc => pc.RemoveFromAsync(It.Is<string>(s => s == Path.Combine(extractPath, id)), It.IsAny<CancellationToken>()))
                 .Callback(() => RemoveFromAsyncCalled.Increment())
                 .Returns(() => Task.CompletedTask);
 

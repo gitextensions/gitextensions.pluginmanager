@@ -3,6 +3,7 @@ using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.Services;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,11 +47,12 @@ namespace PackageManager.ViewModels.Commands
                 }
 
                 IPackageContent packageContent = await package.Current.Model.GetContentAsync(cancellationToken);
-                await packageContent.RemoveFromAsync(install.Path, cancellationToken);
+                string pluginPath = Path.Combine(install.Path, package.Current.Id);
+                await packageContent.RemoveFromAsync(pluginPath, cancellationToken);
                 install.Uninstall(package.Current.Model);
 
                 packageContent = await package.Target.GetContentAsync(cancellationToken);
-                await packageContent.ExtractToAsync(install.Path, cancellationToken);
+                await packageContent.ExtractToAsync(pluginPath, cancellationToken);
                 install.Install(package.Target);
 
                 if (package.IsSelf)

@@ -58,7 +58,7 @@ namespace GitExtensions.PluginManager
 
             ProcessStartInfo info = new ProcessStartInfo()
             {
-                FileName = Path.Combine(pluginsPath, PluginManagerRelativePath),
+                FileName = Path.Combine(pluginsPath, PackageId, PluginManagerRelativePath),
                 Arguments = args.ToString(),
                 UseShellExecute = false,
             };

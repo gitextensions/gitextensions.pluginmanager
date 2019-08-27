@@ -13,7 +13,7 @@
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
     <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
-    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\</GitExtensionsDebugPluginsPath>
+    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\GitExtensions.PluginManager\</GitExtensionsDebugPluginsPath>
     <GitExtensionsReferenceSource>appveyor</GitExtensionsReferenceSource>
     <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
