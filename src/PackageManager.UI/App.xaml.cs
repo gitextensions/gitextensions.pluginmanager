@@ -69,7 +69,7 @@ namespace PackageManager
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             INuGetPackageFilter packageFilter = null;
             if (Args.Dependencies.Any())
-                packageFilter = new DependencyNuGetPackageFilter(Args.Dependencies, frameworks);
+                packageFilter = new DependencyNuGetPackageFilter(LogFactory.Scope("Filter"), Args.Dependencies, frameworks);
 
             NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
             if (Args.Monikers.Any())

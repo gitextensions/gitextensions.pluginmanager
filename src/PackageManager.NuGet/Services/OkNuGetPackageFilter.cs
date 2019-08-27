@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Protocol.Core.Types;
 
@@ -9,8 +10,8 @@ namespace PackageManager.Services
 {
     public class OkNuGetPackageFilter : INuGetPackageFilter
     {
-        public NuGetPackageFilterResult IsPassed(IPackageSearchMetadata package)
-            => NuGetPackageFilterResult.Ok;
+        public Task<NuGetPackageFilterResult> IsPassedAsync(SourceRepository repository, IPackageSearchMetadata package, CancellationToken cancellationToken)
+            => Task.FromResult(NuGetPackageFilterResult.Ok);
 
         #region Singleton
 

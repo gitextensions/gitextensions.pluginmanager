@@ -102,7 +102,7 @@ namespace PackageManager.Services
                         if (result.Count >= options.PageSize)
                             break;
 
-                        await AddPackage(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
+                        await AddPackageAsync(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
                         sourceSearchPackageCount++;
                     }
 
@@ -128,9 +128,9 @@ namespace PackageManager.Services
             return result;
         }
 
-        private async Task AddPackage(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata package, bool isPrereleaseIncluded, CancellationToken cancellationToken)
+        private async Task AddPackageAsync(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata package, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
-            NuGetPackageFilterResult filterResult = filter.IsPassed(package);
+            NuGetPackageFilterResult filterResult = await filter.IsPassedAsync(repository, package, cancellationToken);
             switch (filterResult)
             {
                 case NuGetPackageFilterResult.Ok:

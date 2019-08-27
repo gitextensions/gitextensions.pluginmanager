@@ -182,7 +182,7 @@ namespace PackageManager.Services
                             {
                                 log.Debug($"Package '{package.PackageIdentity}' was found.");
 
-                                NuGetPackageFilterResult filterResult = packageFilter.IsPassed(metadata);
+                                NuGetPackageFilterResult filterResult = await packageFilter.IsPassedAsync(repository, metadata, cancellationToken);
                                 result.Add(new NuGetInstalledPackage(
                                     new NuGetPackage(metadata, repository, contentService, versionService),
                                     filterResult == NuGetPackageFilterResult.Ok
