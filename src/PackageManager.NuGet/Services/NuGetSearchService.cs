@@ -25,9 +25,9 @@ namespace PackageManager.Services
         private readonly ILogger nuGetLog;
         private readonly NuGetPackageVersionService versionService;
         private readonly INuGetPackageFilter filter;
-        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
+        private readonly INuGetSearchTermTransformer queryTransformer;
 
-        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter filter = null, INuGetSearchTermTransformer termTransformer = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
@@ -42,8 +42,8 @@ namespace PackageManager.Services
             this.contentService = contentService;
             this.nuGetLog = new NuGetLogger(log);
             this.versionService = versionService;
-            this.filter = filter;
-            this.frameworkFilter = frameworkFilter;
+            this.filter = filter ?? OkNuGetPackageFilter.Instance;
+            this.queryTransformer = termTransformer ?? EmptyNuGetSearchTermTransformer.Instance;
         }
 
         private SearchOptions EnsureOptions(SearchOptions options)
@@ -65,6 +65,8 @@ namespace PackageManager.Services
 
         public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
+            searchText = queryTransformer.Transform($"id:{searchText}");
+
             log.Debug($"Searching '{searchText}'.");
 
             options = EnsureOptions(options);

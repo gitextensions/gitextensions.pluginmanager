@@ -52,6 +52,7 @@ namespace GitExtensions.PluginManager
             Args args = new Args();
             args.Path = pluginsPath;
             args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility") };
+            args.Tags = "GitExtensions";
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
             args.ProcessNamesToKillBeforeChange = new[] { Process.GetCurrentProcess().ProcessName };

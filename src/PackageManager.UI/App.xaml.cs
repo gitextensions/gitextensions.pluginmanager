@@ -75,13 +75,17 @@ namespace PackageManager
             if (Args.Monikers.Any())
                 frameworkFilter = new NuGetFrameworkFilter(frameworks);
 
+            INuGetSearchTermTransformer termTransformer = null;
+            if (Args.Tags != null)
+                termTransformer = new TagsNuGetSearchTermTransformer(Args.Tags);
+
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
 
             SelfPackageConverter.Configuration = selfPackageConfiguration;
 
             var contentService = new NuGetPackageContentService(log, frameworkFilter);
             var versionService = new NuGetPackageVersionService(contentService, log, packageFilter, frameworkFilter);
-            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, frameworkFilter);
+            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, termTransformer);
             var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, contentService, versionService, packageFilter, frameworkFilter);
             var selfUpdateService = new SelfUpdateService(this, ProcessService);
 
