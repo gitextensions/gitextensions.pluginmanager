@@ -65,9 +65,19 @@ namespace PackageManager.Services
 
         public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
-            searchText = queryTransformer.Transform($"id:{searchText}");
+            NuGetSearchTerm term = new NuGetSearchTerm();
+            term.Id.Add(searchText);
 
-            log.Debug($"Searching '{searchText}'.");
+            queryTransformer.Transform(term);
+            term.Id.Remove(searchText);
+
+            bool isLateIdSearch = false;
+            if (term.IsEmpty())
+                term.Id.Add(searchText);
+            else
+                isLateIdSearch = true;
+
+            log.Debug($"Searching - user text:'{searchText}'; target query:'{term}'.");
 
             options = EnsureOptions(options);
 
@@ -94,13 +104,16 @@ namespace PackageManager.Services
                     }
 
                     int sourceSearchPackageCount = 0;
-                    foreach (IPackageSearchMetadata package in await SearchAsync(search, searchText, options, cancellationToken))
+                    foreach (IPackageSearchMetadata package in await SearchAsync(search, term.ToString(), options, cancellationToken))
                     {
                         log.Debug($"Found '{package.Identity}'.");
 
                         hasItems = true;
                         if (result.Count >= options.PageSize)
                             break;
+
+                        if (isLateIdSearch && package.Identity.Id.IndexOf(searchText, StringComparison.InvariantCultureIgnoreCase) == -1)
+                            continue;
 
                         await AddPackageAsync(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
                         sourceSearchPackageCount++;

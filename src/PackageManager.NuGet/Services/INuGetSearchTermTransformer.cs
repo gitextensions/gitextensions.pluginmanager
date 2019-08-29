@@ -9,6 +9,6 @@ namespace PackageManager.Services
 {
     public interface INuGetSearchTermTransformer
     {
-        string Transform(string searchTerm);
+        void Transform(NuGetSearchTerm searchTerm);
     }
 }

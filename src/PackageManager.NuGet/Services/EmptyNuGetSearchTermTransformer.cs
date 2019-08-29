@@ -9,7 +9,9 @@ namespace PackageManager.Services
 {
     public class EmptyNuGetSearchTermTransformer : INuGetSearchTermTransformer
     {
-        public string Transform(string searchTerm) => searchTerm;
+        public void Transform(NuGetSearchTerm searchTerm)
+        {
+        }
 
         #region Singleton
 

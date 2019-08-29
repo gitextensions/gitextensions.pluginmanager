@@ -18,12 +18,10 @@ namespace PackageManager.Services
             this.tags = tags;
         }
 
-        public string Transform(string searchTerm)
+        public void Transform(NuGetSearchTerm searchTerm)
         {
-            if (String.IsNullOrEmpty(tags))
-                return searchTerm;
-
-            return $"{searchTerm} tags:{tags}";
+            if (!String.IsNullOrEmpty(tags))
+                searchTerm.Tags.Add(tags);
         }
     }
 }
