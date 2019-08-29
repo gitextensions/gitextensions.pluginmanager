@@ -10,7 +10,6 @@ using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
-using NuGet.Versioning;
 using PackageManager.Logging;
 using PackageManager.Models;
 
@@ -61,29 +60,11 @@ namespace PackageManager.Services
             return options;
         }
 
-        private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
-            => search.SearchAsync(searchText, new SearchFilter(options.IsPrereleaseIncluded), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
-
         public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
-            NuGetSearchTerm term = new NuGetSearchTerm();
-            term.Id.Add(searchText);
+            var (feedTerm, localTerm) = PrepareSearchTerms(searchText);
 
-            queryTransformer.Transform(term);
-            term.Id.Remove(searchText);
-
-            NuGetSearchTerm lateTerm = null;
-            if (term.IsEmpty())
-            {
-                term.Id.Add(searchText);
-            }
-            else
-            {
-                lateTerm = term.Clone();
-                lateTerm.Id.Add(searchText);
-            }
-
-            log.Debug($"Searching - user text:'{searchText}'; target query:'{term}'.");
+            log.Debug($"Searching - user text:'{searchText}'; feed query:'{feedTerm}'.");
 
             options = EnsureOptions(options);
 
@@ -96,7 +77,6 @@ namespace PackageManager.Services
             {
                 log.Debug($"Loading page '{options.PageIndex}'.");
 
-                bool hasItems = false;
                 foreach (IPackageSource packageSource in sources)
                 {
                     log.Debug($"Searching in '{packageSource.Uri}'.");
@@ -106,59 +86,14 @@ namespace PackageManager.Services
                     if (search == null)
                     {
                         log.Debug($"Source skipped, because it doesn't provide '{nameof(PackageSearchResource)}'.");
+
+                        sourcesToSkip.Add(packageSource);
                         continue;
                     }
 
-                    NuGetSearchTerm localTerm = null;
-                    bool clearLateTerm = false;
-                    if (search is LocalPackageSearchResource)
-                    {
-                        // Searching a feed from folder.
-                        localTerm = term;
-                        term = new NuGetSearchTerm();
-
-                        if (lateTerm == null)
-                        {
-                            lateTerm = localTerm;
-                            clearLateTerm = true;
-                        }
-                    }
-
-                    int sourceSearchPackageCount = 0;
-                    foreach (IPackageSearchMetadata package in await SearchAsync(search, term.ToString(), options, cancellationToken))
-                    {
-                        log.Debug($"Found '{package.Identity}'.");
-
-                        hasItems = true;
-                        if (result.Count >= options.PageSize)
-                            break;
-
-                        if (lateTerm != null && !lateTerm.IsMatched(package))
-                        {
-                            log.Debug($"Package skipped by late search term '{lateTerm}'.");
-                            continue;
-                        }
-
-                        await AddPackageAsync(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
-                        sourceSearchPackageCount++;
-                    }
-
-                    // If package source reached end, skip it from next probing.
-                    if (sourceSearchPackageCount < options.PageSize)
+                    if (!await ApplyLocalResourceSearchAsync(result, repository, search, feedTerm, localTerm, options, cancellationToken))
                         sourcesToSkip.Add(packageSource);
-
-                    if (localTerm != null)
-                    {
-                        term = localTerm;
-                        localTerm = null;
-
-                        if (clearLateTerm)
-                            lateTerm = null;
-                    }
                 }
-
-                if (!hasItems)
-                    break;
 
                 options = new SearchOptions()
                 {
@@ -168,11 +103,98 @@ namespace PackageManager.Services
 
                 foreach (IPackageSource source in sourcesToSkip)
                     sources.Remove(source);
+
+                if (sources.Count == 0)
+                    break;
             }
 
             log.Debug($"Search completed. Found '{result.Count}' items.");
             return result;
         }
+
+        /// <summary>
+        /// Prepares instance of terms for filtering in feed and in-app.
+        /// </summary>
+        /// <remarks>
+        /// localTerm should always have all search terms.
+        /// </remarks>
+        private (NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm) PrepareSearchTerms(string searchText)
+        {
+            NuGetSearchTerm feedTerm = new NuGetSearchTerm();
+            feedTerm.Id.Add(searchText);
+
+            queryTransformer.Transform(feedTerm);
+            feedTerm.Id.Remove(searchText);
+
+            NuGetSearchTerm localTerm = null;
+            if (feedTerm.IsEmpty())
+            {
+                feedTerm.Id.Add(searchText);
+            }
+            else
+            {
+                localTerm = feedTerm.Clone();
+                localTerm.Id.Add(searchText);
+            }
+
+            return (feedTerm, localTerm);
+        }
+
+        /// <summary>
+        /// Tries to apply special conditions for looking in local folder feed.
+        /// </summary>
+        /// <returns><c>true</c> if search reached the end of the feed; <c>false</c> otherwise.</returns>
+        private Task<bool> ApplyLocalResourceSearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm, SearchOptions options, CancellationToken cancellationToken)
+        {
+            if (search is LocalPackageSearchResource)
+            {
+                // Searching a feed from folder. Look for all packages and then filter in-app.
+                if (localTerm == null)
+                    localTerm = feedTerm;
+
+                feedTerm = new NuGetSearchTerm();
+            }
+
+            return ApplySearchAsync(result, repository, search, feedTerm, localTerm, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Execute search on <paramref name="search"/>.
+        /// </summary>
+        /// <returns><c>true</c> if search reached the end of the feed; <c>false</c> otherwise.</returns>
+        private async Task<bool> ApplySearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm, SearchOptions options, CancellationToken cancellationToken)
+        {
+            if (localTerm != null && options.PageSize == 1)
+                options.PageSize = 10;
+
+            int sourceSearchPackageCount = 0;
+            foreach (IPackageSearchMetadata package in await SearchAsync(search, feedTerm.ToString(), options, cancellationToken))
+            {
+                sourceSearchPackageCount++;
+
+                log.Debug($"Found '{package.Identity}'.");
+
+                if (result.Count >= options.PageSize)
+                    break;
+
+                if (localTerm != null && !localTerm.IsMatched(package))
+                {
+                    log.Debug($"Package skipped by late search term '{localTerm}'.");
+                    continue;
+                }
+
+                await AddPackageAsync(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
+            }
+
+            // If package source reached end, skip it from next probing.
+            if (sourceSearchPackageCount < options.PageSize)
+                return false;
+
+            return true;
+        }
+
+        private Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(PackageSearchResource search, string searchText, SearchOptions options, CancellationToken cancellationToken)
+            => search.SearchAsync(searchText, new SearchFilter(options.IsPrereleaseIncluded), options.PageIndex * options.PageSize, options.PageSize, nuGetLog, cancellationToken);
 
         private async Task AddPackageAsync(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata package, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
