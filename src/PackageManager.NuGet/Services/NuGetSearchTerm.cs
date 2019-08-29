@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Neptuo;
+using NuGet.Protocol.Core.Types;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
-    public class NuGetSearchTerm
+    public class NuGetSearchTerm : ICloneable<NuGetSearchTerm>
     {
         public List<string> Id { get; } = new List<string>();
         public List<string> Version { get; } = new List<string>();
@@ -54,6 +56,45 @@ namespace PackageManager.Services
                 return true;
 
             return false;
+        }
+
+        public bool IsMatched(IPackageSearchMetadata package)
+            => IsMatched(package.Identity.Id, Id)
+            && IsMatched(package.Identity.Version.OriginalVersion, Version)
+            && IsMatched(package.Title, Title)
+            && IsMatched(package.Tags, Tags)
+            && IsMatched(package.Description, Description)
+            && IsMatched(package.Summary, Summary)
+            && IsMatched(package.Owners, Owner);
+
+        private bool IsMatched(string packageValue, List<string> values)
+        {
+            bool result = true;
+            foreach (var value in values)
+            {
+                if (String.IsNullOrEmpty(value))
+                    continue;
+
+                if (packageValue.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) != -1)
+                    return true;
+
+                result = false;
+            }
+
+            return result;
+        }
+
+        public NuGetSearchTerm Clone()
+        {
+            var clone = new NuGetSearchTerm();
+            clone.Id.AddRange(Id);
+            clone.Version.AddRange(Version);
+            clone.Title.AddRange(Title);
+            clone.Tags.AddRange(Tags);
+            clone.Description.AddRange(Description);
+            clone.Summary.AddRange(Summary);
+            clone.Owner.AddRange(Owner);
+            return clone;
         }
     }
 }

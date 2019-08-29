@@ -8,6 +8,7 @@ using Neptuo;
 using Neptuo.Activators;
 using Neptuo.Logging;
 using NuGet.Common;
+using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using PackageManager.Logging;
@@ -71,11 +72,16 @@ namespace PackageManager.Services
             queryTransformer.Transform(term);
             term.Id.Remove(searchText);
 
-            bool isLateIdSearch = false;
+            NuGetSearchTerm lateTerm = null;
             if (term.IsEmpty())
+            {
                 term.Id.Add(searchText);
+            }
             else
-                isLateIdSearch = true;
+            {
+                lateTerm = term.Clone();
+                lateTerm.Id.Add(searchText);
+            }
 
             log.Debug($"Searching - user text:'{searchText}'; target query:'{term}'.");
 
@@ -103,6 +109,21 @@ namespace PackageManager.Services
                         continue;
                     }
 
+                    NuGetSearchTerm localTerm = null;
+                    bool clearLateTerm = false;
+                    if (search is LocalPackageSearchResource)
+                    {
+                        // Searching a feed from folder.
+                        localTerm = term;
+                        term = new NuGetSearchTerm();
+
+                        if (lateTerm == null)
+                        {
+                            lateTerm = localTerm;
+                            clearLateTerm = true;
+                        }
+                    }
+
                     int sourceSearchPackageCount = 0;
                     foreach (IPackageSearchMetadata package in await SearchAsync(search, term.ToString(), options, cancellationToken))
                     {
@@ -112,8 +133,11 @@ namespace PackageManager.Services
                         if (result.Count >= options.PageSize)
                             break;
 
-                        if (isLateIdSearch && package.Identity.Id.IndexOf(searchText, StringComparison.InvariantCultureIgnoreCase) == -1)
+                        if (lateTerm != null && !lateTerm.IsMatched(package))
+                        {
+                            log.Debug($"Package skipped by late search term '{lateTerm}'.");
                             continue;
+                        }
 
                         await AddPackageAsync(result, repository, package, options.IsPrereleaseIncluded, cancellationToken);
                         sourceSearchPackageCount++;
@@ -122,6 +146,15 @@ namespace PackageManager.Services
                     // If package source reached end, skip it from next probing.
                     if (sourceSearchPackageCount < options.PageSize)
                         sourcesToSkip.Add(packageSource);
+
+                    if (localTerm != null)
+                    {
+                        term = localTerm;
+                        localTerm = null;
+
+                        if (clearLateTerm)
+                            lateTerm = null;
+                    }
                 }
 
                 if (!hasItems)
