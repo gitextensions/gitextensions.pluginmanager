@@ -52,7 +52,7 @@ namespace PackageManager.Services
             if (values.Count == 0)
                 return false;
 
-            if (values.Any(s => !String.IsNullOrEmpty(s)))
+            if (values.Any(s => !string.IsNullOrEmpty(s)))
                 return true;
 
             return false;
@@ -72,10 +72,10 @@ namespace PackageManager.Services
             bool result = true;
             foreach (var value in values)
             {
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                     continue;
 
-                if (packageValue.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) != -1)
+                if (packageValue.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) != -1)
                     return true;
 
                 result = false;

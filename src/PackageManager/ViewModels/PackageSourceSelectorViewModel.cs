@@ -23,10 +23,10 @@ namespace PackageManager.ViewModels
             {
                 if (selectedSources == null)
                 {
-                    if (string.IsNullOrEmpty(SelectedName) || SelectedName == AllFeedName)
+                    if (string.IsNullOrEmpty(SelectedName) || string.Equals(SelectedName, AllFeedName, StringComparison.CurrentCultureIgnoreCase))
                         selectedSources = service.All;
                     else
-                        selectedSources = new List<IPackageSource>(1) { service.All.First(s => s.Name == SelectedName) };
+                        selectedSources = new List<IPackageSource>(1) { service.All.First(s => string.Equals(s.Name, SelectedName, StringComparison.CurrentCultureIgnoreCase)) };
                 }
 
                 return selectedSources;
@@ -53,7 +53,7 @@ namespace PackageManager.ViewModels
                         if (value == null)
                             service.MarkAsPrimary(null);
                         else
-                            service.MarkAsPrimary(service.All.FirstOrDefault(s => s.Name == value));
+                            service.MarkAsPrimary(service.All.FirstOrDefault(s => string.Equals(s.Name, value, StringComparison.CurrentCultureIgnoreCase)));
                     }
                 }
             }
@@ -96,7 +96,7 @@ namespace PackageManager.ViewModels
                 if (isSelectedNameContained)
                     SelectedName = selectedName;
                 else if (service.Primary != null)
-                    SelectedName = SourceNames.FirstOrDefault(s => s == service.Primary.Name);
+                    SelectedName = SourceNames.FirstOrDefault(s => string.Equals(s, service.Primary.Name, StringComparison.CurrentCultureIgnoreCase));
                 else
                     SelectedName = SourceNames.FirstOrDefault();
             }

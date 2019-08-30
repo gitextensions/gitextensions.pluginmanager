@@ -10,6 +10,6 @@ namespace PackageManager.Services
 {
     public interface INuGetPackageFilter
     {
-        Task<NuGetPackageFilterResult> IsPassedAsync(SourceRepository repository, IPackageSearchMetadata package, CancellationToken cancellationToken);
+        Task<NuGetPackageFilterResult> FilterAsync(SourceRepository repository, IPackageSearchMetadata package, CancellationToken cancellationToken);
     }
 }

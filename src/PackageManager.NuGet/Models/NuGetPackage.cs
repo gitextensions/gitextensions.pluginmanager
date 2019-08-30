@@ -49,7 +49,7 @@ namespace PackageManager.Models
             => await contentService.DownloadAsync(repository, source, cancellationToken);
 
         public async Task<IEnumerable<IPackage>> GetVersionsAsync(bool isPrereleaseIncluded, CancellationToken cancellationToken)
-            => await versionService.GetListAsync(Int32.MaxValue, source, repository, isPrereleaseIncluded: isPrereleaseIncluded, cancellationToken: cancellationToken);
+            => await versionService.GetListAsync(int.MaxValue, source, repository, isPrereleaseIncluded: isPrereleaseIncluded, cancellationToken: cancellationToken);
 
         public bool Equals(IPackage other)
             => Equals((IPackageIdentity)other);

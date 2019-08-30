@@ -45,10 +45,10 @@ namespace PackageManager.Services
             try
             {
                 List<IPackage> result = new List<IPackage>();
-                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter, cancellationToken))
+                if (await SearchOlderVersionsDirectlyAsync(result, resultCount, package, repository, versionFilter, cancellationToken))
                     return result;
 
-                if (await SearchOlderVersionsUsingMetadataResource(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
+                if (await SearchOlderVersionsUsingMetadataResourceAsync(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
                     return result;
 
                 return new List<IPackage>();
@@ -60,7 +60,7 @@ namespace PackageManager.Services
             }
         }
 
-        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, CancellationToken cancellationToken)
+        private async Task<bool> SearchOlderVersionsDirectlyAsync(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, CancellationToken cancellationToken)
         {
             bool isSuccess = false;
             IEnumerable<VersionInfo> versions = null;
@@ -96,7 +96,7 @@ namespace PackageManager.Services
             return isSuccess;
         }
 
-        private async Task<bool> SearchOlderVersionsUsingMetadataResource(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded, CancellationToken cancellationToken)
+        private async Task<bool> SearchOlderVersionsUsingMetadataResourceAsync(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
             PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
             if (metadataResource == null)
@@ -136,7 +136,7 @@ namespace PackageManager.Services
         {
             log.Debug($"Found '{version.Identity}'.");
 
-            NuGetPackageFilterResult filterResult = await filter.IsPassedAsync(repository, version, cancellationToken);
+            NuGetPackageFilterResult filterResult = await filter.FilterAsync(repository, version, cancellationToken);
             switch (filterResult)
             {
                 case NuGetPackageFilterResult.Ok:

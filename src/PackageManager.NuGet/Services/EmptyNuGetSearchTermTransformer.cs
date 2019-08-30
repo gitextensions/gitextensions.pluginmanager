@@ -13,28 +13,6 @@ namespace PackageManager.Services
         {
         }
 
-        #region Singleton
-
-        private static EmptyNuGetSearchTermTransformer instance;
-        private static object instanceLock = new object();
-
-        public static EmptyNuGetSearchTermTransformer Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (instanceLock)
-                    {
-                        if (instance == null)
-                            instance = new EmptyNuGetSearchTermTransformer();
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
+        public readonly static EmptyNuGetSearchTermTransformer Instance = new EmptyNuGetSearchTermTransformer();
     }
 }

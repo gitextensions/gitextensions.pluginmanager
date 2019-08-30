@@ -198,7 +198,7 @@ namespace PackageManager.Services
 
         private async Task AddPackageAsync(List<IPackage> result, SourceRepository repository, IPackageSearchMetadata package, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
-            NuGetPackageFilterResult filterResult = await filter.IsPassedAsync(repository, package, cancellationToken);
+            NuGetPackageFilterResult filterResult = await filter.FilterAsync(repository, package, cancellationToken);
             switch (filterResult)
             {
                 case NuGetPackageFilterResult.Ok:
@@ -234,7 +234,7 @@ namespace PackageManager.Services
 
             IEnumerable<IPackage> packages = await SearchAsync(packageSources, package.Id, new SearchOptions() { PageSize = 1, IsPrereleaseIncluded = isPrereleaseIncluded }, cancellationToken);
             IPackage latest = packages.FirstOrDefault();
-            if (latest != null && latest.Id == package.Id)
+            if (latest != null && string.Equals(latest.Id, package.Id, StringComparison.InvariantCultureIgnoreCase))
             {
                 log.Debug($"Found version '{latest.Version}'.");
                 return latest;

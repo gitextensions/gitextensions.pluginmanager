@@ -20,7 +20,7 @@ namespace PackageManager.Services
 
         public void Transform(NuGetSearchTerm searchTerm)
         {
-            if (!String.IsNullOrEmpty(tags))
+            if (!string.IsNullOrEmpty(tags))
                 searchTerm.Tags.Add(tags);
         }
     }

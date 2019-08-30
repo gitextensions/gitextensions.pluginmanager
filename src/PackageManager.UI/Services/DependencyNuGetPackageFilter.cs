@@ -34,7 +34,7 @@ namespace PackageManager.Services
             nuGetLogger = new NuGetLogger(log);
         }
 
-        public async Task<NuGetPackageFilterResult> IsPassedAsync(SourceRepository repository, IPackageSearchMetadata package, CancellationToken cancellationToken)
+        public async Task<NuGetPackageFilterResult> FilterAsync(SourceRepository repository, IPackageSearchMetadata package, CancellationToken cancellationToken)
         {
             if (!dependencies.Any())
                 return NuGetPackageFilterResult.Ok;
@@ -54,7 +54,7 @@ namespace PackageManager.Services
                     // - When all dependencies are missing, don't even try previous versions.
                     foreach (var dependency in dependencies)
                     {
-                        PackageDependency packageDependency = dependencyInfo.Dependencies.FirstOrDefault(p => p.Id == dependency.Id);
+                        PackageDependency packageDependency = dependencyInfo.Dependencies.FirstOrDefault(p => string.Equals(p.Id, dependency.Id, StringComparison.CurrentCultureIgnoreCase));
                         if (packageDependency == null)
                         {
                             log.Info($"Package '{package.Identity}' skipped: missing dependency '{dependency.Id}'.");

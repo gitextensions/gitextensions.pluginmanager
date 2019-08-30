@@ -18,7 +18,7 @@ namespace PackageManager.Views.DesignData
             => false;
 
         public bool IsInstalled(IPackageIdentity package)
-            => Installed?.Id == package?.Id && Installed?.Version == package?.Version;
+            => string.Equals(Installed?.Id, package?.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(Installed?.Version, package?.Version, StringComparison.CurrentCultureIgnoreCase);
 
         public void Install(IPackageIdentity package)
         { }

@@ -21,7 +21,7 @@ namespace PackageManager.Views.Converters
             if (value is string)
             {
                 string stringValue = value as string;
-                if (stringValue == String.Empty)
+                if (stringValue == string.Empty)
                     return TrueValue;
             }
 

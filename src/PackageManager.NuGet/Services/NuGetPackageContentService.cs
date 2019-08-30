@@ -41,7 +41,7 @@ namespace PackageManager.Services
             using (var sourceCacheContext = new SourceCacheContext())
             {
                 var context = new PackageDownloadContext(sourceCacheContext, Path.GetTempPath(), true);
-                var result = await download.GetDownloadResourceResultAsync(package.Identity, context, String.Empty, nuGetLog, cancellationToken);
+                var result = await download.GetDownloadResourceResultAsync(package.Identity, context, string.Empty, nuGetLog, cancellationToken);
                 if (result.Status == DownloadResourceResultStatus.Cancelled)
                     throw new OperationCanceledException();
                 else if (result.Status == DownloadResourceResultStatus.NotFound)

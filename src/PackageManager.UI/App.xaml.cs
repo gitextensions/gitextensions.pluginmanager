@@ -45,7 +45,7 @@ namespace PackageManager
                 .AddSerializer(MemoryLogSerializer);
 
             ILog log = LogFactory.Scope("Startup");
-            log.Debug($"Startup arguments: {Environment.NewLine}{String.Join(" ", e.Args)}");
+            log.Debug($"Startup arguments: {Environment.NewLine}{string.Join(" ", e.Args)}");
             log.Debug($"Current version: {VersionInfo.Version}");
 
             Args = new Args(e.Args);
@@ -174,10 +174,10 @@ namespace PackageManager
             updates.Refresh.Completed += async () =>
             {
                 bool canUpdate = false;
-                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
+                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => string.Equals(p.Current.Id, Args.SelfPackageId, StringComparison.CurrentCultureIgnoreCase));
                 if (package != null)
                 {
-                    if (package.Target.Version == Args.SelfUpdateVersion)
+                    if (string.Equals(package.Target.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase))
                     {
                         canUpdate = true;
                     }
@@ -186,7 +186,7 @@ namespace PackageManager
                         if (package.Current.LoadVersions.CanExecute())
                             package.Current.LoadVersions.Execute();
 
-                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => p.Version == Args.SelfUpdateVersion);
+                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => string.Equals(p.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase));
                         if (version != null)
                         {
                             package.Target = version.Model;

@@ -63,7 +63,7 @@ namespace PackageManager.Services
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             {
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
-                return reader.GetPackages().Any(p => p.PackageIdentity.Id == packageId);
+                return reader.GetPackages().Any(p => string.Equals(p.PackageIdentity.Id, packageId, StringComparison.CurrentCultureIgnoreCase));
             }
         }
 
@@ -77,7 +77,7 @@ namespace PackageManager.Services
             using (Stream fileContent = new FileStream(ConfigFilePath, FileMode.Open))
             {
                 PackagesConfigReader reader = new PackagesConfigReader(fileContent);
-                return reader.GetPackages().Any(p => p.PackageIdentity.Id == package.Id && p.PackageIdentity.Version.ToFullString() == package.Version);
+                return reader.GetPackages().Any(p => string.Equals(p.PackageIdentity.Id, package.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(p.PackageIdentity.Version.ToFullString(), package.Version, StringComparison.CurrentCultureIgnoreCase));
             }
         }
 
@@ -118,7 +118,7 @@ namespace PackageManager.Services
             ReadPackageConfig(
                 (p, cache) => 
                 {
-                    if (p.PackageIdentity.Id == packageId)
+                    if (string.Equals(p.PackageIdentity.Id, packageId, StringComparison.CurrentCultureIgnoreCase))
                     {
                         version = p.PackageIdentity.Version;
                         framework = p.TargetFramework;
@@ -182,7 +182,7 @@ namespace PackageManager.Services
                             {
                                 log.Debug($"Package '{package.PackageIdentity}' was found.");
 
-                                NuGetPackageFilterResult filterResult = await packageFilter.IsPassedAsync(repository, metadata, cancellationToken);
+                                NuGetPackageFilterResult filterResult = await packageFilter.FilterAsync(repository, metadata, cancellationToken);
                                 result.Add(new NuGetInstalledPackage(
                                     new NuGetPackage(metadata, repository, contentService, versionService),
                                     filterResult == NuGetPackageFilterResult.Ok
@@ -209,7 +209,7 @@ namespace PackageManager.Services
             await ReadPackageConfig(
                 (package, context) =>
                 {
-                    if (package.PackageIdentity.Id == packageId)
+                    if (string.Equals(package.PackageIdentity.Id, packageId, StringComparison.CurrentCultureIgnoreCase))
                     {
                         result = new NuGetPackageIdentity(package.PackageIdentity);
                         return Task.FromResult(true);

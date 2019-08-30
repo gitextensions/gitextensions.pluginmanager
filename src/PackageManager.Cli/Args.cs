@@ -105,16 +105,16 @@ namespace PackageManager
         {
             StringBuilder result = new StringBuilder();
 
-            if (!String.IsNullOrEmpty(Path))
+            if (!string.IsNullOrEmpty(Path))
                 result.Append($"--path \"{Path}\"");
 
-            if (!String.IsNullOrEmpty(SelfPackageId))
+            if (!string.IsNullOrEmpty(SelfPackageId))
                 result.Append($" --selfpackageid {SelfPackageId}");
 
             if (IsSelfUpdate)
                 result.Append(" --selfupdate");
 
-            if (!String.IsNullOrEmpty(SelfOriginalPath))
+            if (!string.IsNullOrEmpty(SelfOriginalPath))
                 result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
 
             return result.ToString();

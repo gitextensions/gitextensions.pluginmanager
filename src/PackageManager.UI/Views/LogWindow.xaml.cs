@@ -32,7 +32,7 @@ namespace PackageManager.Views
         private async void RefreshContent()
         {
             TextContent.Text = log.GetContent();
-            if (String.IsNullOrEmpty(TextContent.Text))
+            if (string.IsNullOrEmpty(TextContent.Text))
                 TextContent.Text = "No entries.";
 
             await Task.Delay(50);
