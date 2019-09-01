@@ -30,7 +30,7 @@ namespace PackageManager.Exceptions
 
         void IExceptionHandler<IExceptionHandlerContext<PackageFileRemovalException>>.Handle(IExceptionHandlerContext<PackageFileRemovalException> context)
         {
-            navigator.Notify("Package Removal Error", $"Error deleting file to '{context.Exception.FilePath}'", Navigator.MessageType.Error);
+            navigator.Notify("Package Removal Error", $"Error deleting file '{context.Exception.FilePath}'", Navigator.MessageType.Error);
             context.IsHandled = true;
         }
     }
