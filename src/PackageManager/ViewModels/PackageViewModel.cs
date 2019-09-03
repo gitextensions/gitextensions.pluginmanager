@@ -77,7 +77,7 @@ namespace PackageManager.ViewModels
             if (other == null)
                 return false;
 
-            return Id == other.Id && Version == other.Version;
+            return string.Equals(Id, other.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(Version, other.Version, StringComparison.CurrentCultureIgnoreCase);
         }
 
         public override int GetHashCode()

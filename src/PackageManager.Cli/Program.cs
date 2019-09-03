@@ -40,7 +40,7 @@ namespace PackageManager.Cli
                 UpdatesViewModel viewModel = CreateUpdatesViewModel();
                 await viewModel.Refresh.ExecuteAsync();
 
-                PackageUpdateViewModel packageModel = viewModel.Packages.FirstOrDefault(p => p.Target.Id == Args.PackageId);
+                PackageUpdateViewModel packageModel = viewModel.Packages.FirstOrDefault(p => string.Equals(p.Target.Id, Args.PackageId, StringComparison.CurrentCultureIgnoreCase));
                 if (packageModel != null && viewModel.Update.CanExecute(packageModel))
                 {
                     await viewModel.Update.ExecuteAsync(packageModel);

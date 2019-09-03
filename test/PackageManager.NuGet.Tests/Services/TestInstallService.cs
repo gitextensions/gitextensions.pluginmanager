@@ -56,7 +56,7 @@ namespace PackageManager.Services
 
             Reader(reader =>
             {
-                Assert.IsTrue(reader.GetPackages().Any(p => p.PackageIdentity.Id == package.Object.Id && p.PackageIdentity.Version.ToFullString() == package.Object.Version));
+                Assert.IsTrue(reader.GetPackages().Any(p => string.Equals(p.PackageIdentity.Id, package.Object.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(p.PackageIdentity.Version.ToFullString(), package.Object.Version, StringComparison.CurrentCultureIgnoreCase)));
             });
         }
 
@@ -69,7 +69,7 @@ namespace PackageManager.Services
 
             Reader(reader =>
             {
-                Assert.IsFalse(reader.GetPackages().Any(p => p.PackageIdentity.Id == package.Object.Id && p.PackageIdentity.Version.ToFullString() == package.Object.Version));
+                Assert.IsFalse(reader.GetPackages().Any(p => string.Equals(p.PackageIdentity.Id, package.Object.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(p.PackageIdentity.Version.ToFullString(), package.Object.Version, StringComparison.CurrentCultureIgnoreCase)));
             });
         }
 

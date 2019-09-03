@@ -45,7 +45,7 @@ namespace PackageManager
                 .AddSerializer(MemoryLogSerializer);
 
             ILog log = LogFactory.Scope("Startup");
-            log.Debug($"Startup arguments: {Environment.NewLine}{String.Join(" ", e.Args)}");
+            log.Debug($"Startup arguments: {Environment.NewLine}{string.Join(" ", e.Args)}");
             log.Debug($"Current version: {VersionInfo.Version}");
 
             Args = new Args(e.Args);
@@ -69,11 +69,15 @@ namespace PackageManager
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
             INuGetPackageFilter packageFilter = null;
             if (Args.Dependencies.Any())
-                packageFilter = new DependencyNuGetPackageFilter(Args.Dependencies, frameworks);
+                packageFilter = new DependencyNuGetPackageFilter(LogFactory.Scope("Filter"), Args.Dependencies, frameworks);
 
             NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
             if (Args.Monikers.Any())
                 frameworkFilter = new NuGetFrameworkFilter(frameworks);
+
+            INuGetSearchTermTransformer termTransformer = null;
+            if (Args.Tags != null)
+                termTransformer = new TagsNuGetSearchTermTransformer(Args.Tags);
 
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
 
@@ -81,7 +85,7 @@ namespace PackageManager
 
             var contentService = new NuGetPackageContentService(log, frameworkFilter);
             var versionService = new NuGetPackageVersionService(contentService, log, packageFilter, frameworkFilter);
-            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, frameworkFilter);
+            var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, termTransformer);
             var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, contentService, versionService, packageFilter, frameworkFilter);
             var selfUpdateService = new SelfUpdateService(this, ProcessService);
 
@@ -170,10 +174,10 @@ namespace PackageManager
             updates.Refresh.Completed += async () =>
             {
                 bool canUpdate = false;
-                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => p.Current.Id == Args.SelfPackageId);
+                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => string.Equals(p.Current.Id, Args.SelfPackageId, StringComparison.CurrentCultureIgnoreCase));
                 if (package != null)
                 {
-                    if (package.Target.Version == Args.SelfUpdateVersion)
+                    if (string.Equals(package.Target.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase))
                     {
                         canUpdate = true;
                     }
@@ -182,7 +186,7 @@ namespace PackageManager
                         if (package.Current.LoadVersions.CanExecute())
                             package.Current.LoadVersions.Execute();
 
-                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => p.Version == Args.SelfUpdateVersion);
+                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => string.Equals(p.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase));
                         if (version != null)
                         {
                             package.Target = version.Model;

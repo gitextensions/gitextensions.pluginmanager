@@ -23,10 +23,10 @@ namespace PackageManager.ViewModels
             {
                 if (selectedSources == null)
                 {
-                    if (string.IsNullOrEmpty(SelectedName) || SelectedName == AllFeedName)
+                    if (string.IsNullOrEmpty(SelectedName) || string.Equals(SelectedName, AllFeedName, StringComparison.CurrentCultureIgnoreCase))
                         selectedSources = service.All;
                     else
-                        selectedSources = new List<IPackageSource>(1) { service.All.First(s => s.Name == SelectedName) };
+                        selectedSources = new List<IPackageSource>(1) { service.All.First(s => string.Equals(s.Name, SelectedName, StringComparison.CurrentCultureIgnoreCase)) };
                 }
 
                 return selectedSources;
@@ -48,10 +48,13 @@ namespace PackageManager.ViewModels
 
                     selectedSources = null;
 
-                    if (value == null)
-                        service.MarkAsPrimary(null);
-                    else
-                        service.MarkAsPrimary(service.All.FirstOrDefault(s => s.Name == value));
+                    if (!isServiceUpdating)
+                    {
+                        if (value == null)
+                            service.MarkAsPrimary(null);
+                        else
+                            service.MarkAsPrimary(service.All.FirstOrDefault(s => string.Equals(s.Name, value, StringComparison.CurrentCultureIgnoreCase)));
+                    }
                 }
             }
         }
@@ -68,31 +71,42 @@ namespace PackageManager.ViewModels
 
         private void OnServiceChanged()
         {
-            string selectedName = SelectedName;
-            SourceNames.Clear();
-
-            bool isSelectedNameContained = false;
-            void Add(string name)
+            try
             {
-                if (!isSelectedNameContained)
-                    isSelectedNameContained = name == selectedName;
+                isServiceUpdating = true;
 
-                SourceNames.Add(name);
+                string selectedName = SelectedName;
+                SourceNames.Clear();
+
+                bool isSelectedNameContained = false;
+                void Add(string name)
+                {
+                    if (!isSelectedNameContained)
+                        isSelectedNameContained = name == selectedName;
+
+                    SourceNames.Add(name);
+                }
+
+                if (service.All.Count > 1)
+                    Add(AllFeedName);
+
+                foreach (IPackageSource source in service.All)
+                    Add(source.Name);
+
+                if (isSelectedNameContained)
+                    SelectedName = selectedName;
+                else if (service.Primary != null)
+                    SelectedName = SourceNames.FirstOrDefault(s => string.Equals(s, service.Primary.Name, StringComparison.CurrentCultureIgnoreCase));
+                else
+                    SelectedName = SourceNames.FirstOrDefault();
             }
-
-            if (service.All.Count > 1)
-                Add(AllFeedName);
-
-            foreach (IPackageSource source in service.All)
-                Add(source.Name);
-
-            if (isSelectedNameContained)
-                SelectedName = selectedName;
-            else if(service.Primary != null)
-                SelectedName = SourceNames.FirstOrDefault(s => s == service.Primary.Name);
-            else
-                SelectedName = SourceNames.FirstOrDefault();
+            finally
+            {
+                isServiceUpdating = false;
+            }
         }
+
+        private bool isServiceUpdating = false;
 
         public void Dispose()
         {

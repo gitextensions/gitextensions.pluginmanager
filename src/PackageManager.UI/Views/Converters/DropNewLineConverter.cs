@@ -13,11 +13,11 @@ namespace PackageManager.Views.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string target = value?.ToString();
-            if (String.IsNullOrEmpty(target))
+            if (string.IsNullOrEmpty(target))
                 return target;
 
-            target = target.Replace(Environment.NewLine, String.Empty);
-            target = target.Replace("\n", String.Empty);
+            target = target.Replace(Environment.NewLine, string.Empty);
+            target = target.Replace("\n", string.Empty);
             return target;
         }
 

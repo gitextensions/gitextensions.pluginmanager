@@ -17,7 +17,7 @@ namespace PackageManager.Models
 
         public event Action Changed;
 
-        public IPackageSource Primary => Sources.FirstOrDefault(s => s.Name == Provider.ActivePackageSourceName);
+        public IPackageSource Primary => Sources.FirstOrDefault(s => string.Equals(s.Name, Provider.ActivePackageSourceName, StringComparison.CurrentCultureIgnoreCase));
         public IReadOnlyCollection<IPackageSource> All => Sources;
 
         public NuGetPackageSourceCollection(INuGetPackageSourceProvider provider)
@@ -66,7 +66,7 @@ namespace PackageManager.Models
 
         public void MarkAsPrimary(IPackageSource source)
         {
-            if (Provider.ActivePackageSourceName == source?.Name)
+            if (string.Equals(Provider.ActivePackageSourceName, source?.Name, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
             if (source == null)
