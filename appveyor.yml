@@ -7,7 +7,7 @@ version: 1.0.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
-  version_suffix: '-RC1'
+  version_suffix: ''
 
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
