@@ -4,6 +4,7 @@ using PackageManager.Models;
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -37,7 +38,9 @@ namespace PackageManager.ViewModels.Commands
             if (execute)
             {
                 IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
-                await packageContent.ExtractToAsync(service.Path, cancellationToken);
+                string pluginPath = Path.Combine(service.Path, package.Id);
+                Directory.CreateDirectory(pluginPath);
+                await packageContent.ExtractToAsync(pluginPath, cancellationToken);
 
                 service.Install(package);
             }

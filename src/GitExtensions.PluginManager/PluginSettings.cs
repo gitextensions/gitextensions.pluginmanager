@@ -20,7 +20,7 @@ namespace GitExtensions.PluginManager
         /// <summary>
         /// Gets current value of <see cref="CloseInstancesProperty"/>.
         /// </summary>
-        public bool CloseInstances => source.GetValue(CloseInstancesProperty.Name, CloseInstancesProperty.DefaultValue, t => Boolean.Parse(t));
+        public bool CloseInstances => source.GetValue(CloseInstancesProperty.Name, CloseInstancesProperty.DefaultValue, t => bool.Parse(t));
 
         public PluginSettings(ISettingsSource source)
         {

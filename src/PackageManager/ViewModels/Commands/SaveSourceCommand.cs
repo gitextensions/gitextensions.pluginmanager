@@ -64,7 +64,7 @@ namespace PackageManager.ViewModels.Commands
             if (string.IsNullOrEmpty(Name))
                 return false;
 
-            if (sources.Any(s => s.Name == Name && !(edit == null || edit == s)))
+            if (sources.Any(s => string.Equals(s.Name, Name, StringComparison.CurrentCultureIgnoreCase) && !(edit == null || edit == s)))
                 return false;
 
             if (string.IsNullOrEmpty(Url))

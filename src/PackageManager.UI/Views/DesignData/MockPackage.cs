@@ -27,7 +27,7 @@ namespace PackageManager.Views.DesignData
             if (other == null)
                 return false;
 
-            return Id == other.Id && Version == other.Version;
+            return string.Equals(Id, other.Id, StringComparison.CurrentCultureIgnoreCase) && string.Equals(Version, other.Version, StringComparison.CurrentCultureIgnoreCase);
         }
 
         public bool Equals(IPackage other)

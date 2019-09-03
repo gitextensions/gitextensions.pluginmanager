@@ -28,6 +28,7 @@ namespace PackageManager.Services
 
             var frameworkFilter = new NuGetFrameworkFilter(frameworks);
             var packageFilter = new DependencyNuGetPackageFilter(
+                new DefaultLog(),
                 new List<Args.Dependency>()
                 {
                     new Args.Dependency("GitExtensions.Extensibility", null)
@@ -45,10 +46,10 @@ namespace PackageManager.Services
                     frameworkFilter
                 ),
                 new DependencyNuGetPackageFilter(
+                    new DefaultLog(),
                     new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", null) },
                     frameworks
-                ),
-                new NuGetFrameworkFilter(frameworks)
+                )
             );
 
             EnsureConfigDeleted(configFilePath);

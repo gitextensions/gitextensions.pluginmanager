@@ -4,6 +4,7 @@ using PackageManager.Models;
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -30,8 +31,9 @@ namespace PackageManager.ViewModels.Commands
         protected override async Task ExecuteAsync(IPackage package, CancellationToken cancellationToken)
         {
             IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
-            await packageContent.RemoveFromAsync(service.Path, cancellationToken);
-            await packageContent.ExtractToAsync(service.Path, cancellationToken);
+            string pluginPath = Path.Combine(service.Path, package.Id);
+            await packageContent.RemoveFromAsync(pluginPath, cancellationToken);
+            await packageContent.ExtractToAsync(pluginPath, cancellationToken);
         }
 
         public new void RaiseCanExecuteChanged()

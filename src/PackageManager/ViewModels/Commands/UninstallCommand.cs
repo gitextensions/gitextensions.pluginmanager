@@ -4,6 +4,7 @@ using PackageManager.Models;
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -40,7 +41,14 @@ namespace PackageManager.ViewModels.Commands
             if (execute)
             {
                 IPackageContent packageContent = await package.GetContentAsync(cancellationToken);
-                await packageContent.RemoveFromAsync(service.Path, cancellationToken);
+                string pluginPath = Path.Combine(service.Path, package.Id);
+                await packageContent.RemoveFromAsync(pluginPath, cancellationToken);
+
+                // do not delete the plugin directory if it still contains files (e.g. data files)
+                if (Directory.Exists(pluginPath) && !Directory.EnumerateFileSystemEntries(pluginPath).Any())
+                {
+                    Directory.Delete(pluginPath);
+                }
 
                 cancellationToken.ThrowIfCancellationRequested();
 

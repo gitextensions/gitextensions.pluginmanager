@@ -52,13 +52,14 @@ namespace GitExtensions.PluginManager
             Args args = new Args();
             args.Path = pluginsPath;
             args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility") };
+            args.Tags = "GitExtensions";
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
             args.ProcessNamesToKillBeforeChange = new[] { Process.GetCurrentProcess().ProcessName };
 
             ProcessStartInfo info = new ProcessStartInfo()
             {
-                FileName = Path.Combine(pluginsPath, PluginManagerRelativePath),
+                FileName = Path.Combine(pluginsPath, PackageId, PluginManagerRelativePath),
                 Arguments = args.ToString(),
                 UseShellExecute = false,
             };

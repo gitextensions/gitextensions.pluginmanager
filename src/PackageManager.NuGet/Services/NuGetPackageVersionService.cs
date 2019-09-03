@@ -45,10 +45,10 @@ namespace PackageManager.Services
             try
             {
                 List<IPackage> result = new List<IPackage>();
-                if (await SearchOlderVersionsDirectly(result, resultCount, package, repository, versionFilter))
+                if (await SearchOlderVersionsDirectlyAsync(result, resultCount, package, repository, versionFilter, cancellationToken))
                     return result;
 
-                if (await SearchOlderVersionsUsingMetadataResource(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
+                if (await SearchOlderVersionsUsingMetadataResourceAsync(result, resultCount, package, repository, versionFilter, isPrereleaseIncluded, cancellationToken))
                     return result;
 
                 return new List<IPackage>();
@@ -60,7 +60,7 @@ namespace PackageManager.Services
             }
         }
 
-        private async Task<bool> SearchOlderVersionsDirectly(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter)
+        private async Task<bool> SearchOlderVersionsDirectlyAsync(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, CancellationToken cancellationToken)
         {
             bool isSuccess = false;
             IEnumerable<VersionInfo> versions = null;
@@ -81,7 +81,7 @@ namespace PackageManager.Services
                 // TODO: Filter prelease on V2 feed.
                 if (version.PackageSearchMetadata != null && versionFilter(package, version.PackageSearchMetadata))
                 {
-                    IPackage item = ProcessOlderVersion(repository, version.PackageSearchMetadata);
+                    IPackage item = await ProcessOlderVersionAsync(repository, version.PackageSearchMetadata, cancellationToken);
                     if (item != null)
                     {
                         result.Add(item);
@@ -96,7 +96,7 @@ namespace PackageManager.Services
             return isSuccess;
         }
 
-        private async Task<bool> SearchOlderVersionsUsingMetadataResource(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded, CancellationToken cancellationToken)
+        private async Task<bool> SearchOlderVersionsUsingMetadataResourceAsync(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, bool isPrereleaseIncluded, CancellationToken cancellationToken)
         {
             PackageMetadataResource metadataResource = await repository.GetResourceAsync<PackageMetadataResource>(cancellationToken);
             if (metadataResource == null)
@@ -118,7 +118,7 @@ namespace PackageManager.Services
                 {
                     if (versionFilter(package, version))
                     {
-                        IPackage item = ProcessOlderVersion(repository, version);
+                        IPackage item = await ProcessOlderVersionAsync(repository, version, cancellationToken);
                         if (item != null)
                         {
                             result.Add(item);
@@ -132,11 +132,11 @@ namespace PackageManager.Services
             return true;
         }
 
-        private IPackage ProcessOlderVersion(SourceRepository repository, IPackageSearchMetadata version)
+        private async Task<IPackage> ProcessOlderVersionAsync(SourceRepository repository, IPackageSearchMetadata version, CancellationToken cancellationToken)
         {
             log.Debug($"Found '{version.Identity}'.");
 
-            NuGetPackageFilterResult filterResult = filter.IsPassed(version);
+            NuGetPackageFilterResult filterResult = await filter.FilterAsync(repository, version, cancellationToken);
             switch (filterResult)
             {
                 case NuGetPackageFilterResult.Ok:

@@ -17,6 +17,7 @@ namespace PackageManager
         public bool IsSelfUpdate { get; set; }
         public string SelfOriginalPath { get; set; }
         public string SelfUpdateVersion { get; set; }
+        public string Tags { get; set; }
 
         public IReadOnlyCollection<string> ProcessNamesToKillBeforeChange { get; set; }
 
@@ -74,6 +75,9 @@ namespace PackageManager
                 case "--dependencies":
                     Dependencies = ParseDependencies(value);
                     return true;
+                case "--tags":
+                    Tags = value;
+                    return true;
                 case "--selfpackageid":
                     SelfPackageId = value;
                     return true;
@@ -116,35 +120,38 @@ namespace PackageManager
         {
             StringBuilder result = new StringBuilder();
 
-            if (!String.IsNullOrEmpty(Path))
+            if (!string.IsNullOrEmpty(Path))
                 result.Append($"--path \"{Path}\"");
 
             if (Monikers.Count > 0)
             {
                 result.Append($" --monikers ");
-                result.Append(String.Join(",", Monikers));
+                result.Append(string.Join(",", Monikers));
             }
 
             if (Dependencies.Count > 0)
             {
                 result.Append(" --dependencies ");
-                result.Append(String.Join(",", Dependencies.Select(d => d.Id + (d.Version != null ? "-v" + d.Version : ""))));
+                result.Append(string.Join(",", Dependencies.Select(d => d.Id + (d.Version != null ? "-v" + d.Version : ""))));
             }
 
-            if (!String.IsNullOrEmpty(SelfPackageId))
+            if (!string.IsNullOrEmpty(Tags))
+                result.Append($" --tags {Tags}");
+
+            if (!string.IsNullOrEmpty(SelfPackageId))
                 result.Append($" --selfpackageid {SelfPackageId}");
 
             if (IsSelfUpdate)
                 result.Append(" --selfupdate");
 
-            if (!String.IsNullOrEmpty(SelfOriginalPath))
+            if (!string.IsNullOrEmpty(SelfOriginalPath))
                 result.Append($" --selforiginalpath \"{SelfOriginalPath}\"");
 
-            if (!String.IsNullOrEmpty(SelfUpdateVersion))
+            if (!string.IsNullOrEmpty(SelfUpdateVersion))
                 result.Append($" --selfupdateversion \"{SelfUpdateVersion}\"");
 
             if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Count > 0)
-                result.Append($" --processnamestokillbeforechange \"{String.Join(",", ProcessNamesToKillBeforeChange)}\"");
+                result.Append($" --processnamestokillbeforechange \"{string.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
             return result.ToString();
         }
