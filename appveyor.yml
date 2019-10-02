@@ -49,8 +49,8 @@ test_script:
 #---------------------------------#
 
 artifacts:
-- path: .\*.zip
-- path: .\*.nupkg
+- path: .\GitExtensions.PluginManager.*.zip
+- path: .\GitExtensions.PluginManager.*.nupkg
 
 #---------------------------------#
 #     deployment configuration    #
