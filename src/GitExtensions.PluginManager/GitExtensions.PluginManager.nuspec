@@ -7,11 +7,13 @@
     <description>$description$</description>
     <projectUrl>$projectUrl$</projectUrl>
     <tags>$tags$</tags>
+    <license type="file">LICENSE.md</license>
     <dependencies>
-      <dependency id="GitExtensions.Extensibility" version="[3.2.0, 3.3.0)" />
+      <dependency id="GitExtensions.Extensibility" version="[0.1.0, 1.0.0)" />
     </dependencies>
   </metadata>
   <files>
+    <file src="../../LICENSE.md" target="/" />
     <file src="bin/$configuration$/net461/GitExtensions.PluginManager.dll" target="lib/" />
     <file src="bin/$configuration$/net461/PackageManager/PackageManager.UI.exe" target="lib/PackageManager/" />
   </files>

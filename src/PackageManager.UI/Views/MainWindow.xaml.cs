@@ -52,7 +52,7 @@ namespace PackageManager.Views
             if (context.IsExecutable)
             {
                 bool result = navigator.Confirm(
-                    "PluginManager",
+                    "Plugin Manager",
                     "Plugin Manager is going to write to files that are holded by other executables. " + Environment.NewLine +
                     "Do you want to kill all instances of these applications?"
                 );

@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 1.0.0.{build}
+version: 1.1.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
@@ -11,9 +11,6 @@ environment:
 
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
-
-# Maximum number of concurrent jobs for the project
-max_jobs: 1
 
 #---------------------------------#
 #    environment configuration    #

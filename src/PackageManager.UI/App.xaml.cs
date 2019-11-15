@@ -56,7 +56,7 @@ namespace PackageManager
 
             if (!Directory.Exists(Args.Path))
             {
-                Navigator.Notify("Packages", "Missing argument '--path' - a target path to install packages to.", Navigator.MessageType.Error);
+                Navigator.Notify("Plugin Manager", "Missing argument '--path' - a target path to install packages to.", Navigator.MessageType.Error);
                 Shutdown();
                 return;
             }
@@ -104,10 +104,8 @@ namespace PackageManager
 
             wnd.Show();
 
-            /*
             if (Args.IsSelfUpdate)
                 RunSelfUpdate(wnd);
-            */
         }
 
         private void BuildExceptionHandler()
@@ -194,13 +192,13 @@ namespace PackageManager
                         }
                         else
                         {
-                            Navigator.Notify("Self Update Error", $"Unnable to find update package (version {Args.SelfUpdateVersion}) for PackageManager.", Navigator.MessageType.Error);
+                            Navigator.Notify("Self Update Error", $"Unnable to find update package (version {Args.SelfUpdateVersion}) for Plugin Manager.", Navigator.MessageType.Error);
                         }
                     }
                 }
                 else
                 {
-                    Navigator.Notify("Self Update Error", $"Unnable to find update package for PackageManager.", Navigator.MessageType.Error);
+                    Navigator.Notify("Self Update Error", $"Unnable to find update package for Plugin Manager.", Navigator.MessageType.Error);
                 }
 
                 if (canUpdate)

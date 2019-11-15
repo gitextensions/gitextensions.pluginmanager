@@ -13,11 +13,12 @@
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
     <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
-    <GitExtensionsDebugPluginsPath>..\..\references\GitExtensions\UserPlugins\GitExtensions.PluginManager\</GitExtensionsDebugPluginsPath>
-    <GitExtensionsReferenceSource>appveyor</GitExtensionsReferenceSource>
-    <GitExtensionsReferenceVersion>v3.2.0.5938</GitExtensionsReferenceVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitExtensions.Extensibility" Version="0.1.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\PackageManager.UI\Args.cs" Link="Args.cs" />
@@ -25,13 +26,13 @@
 
   <ItemGroup>
     <Reference Include="GitUI">
-      <HintPath>..\..\references\GitExtensions\GitUI.dll</HintPath>
+      <HintPath>$(GitExtensionsPath)\GitUI.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
-      <HintPath>..\..\references\GitExtensions\GitUIPluginInterfaces.dll</HintPath>
+      <HintPath>$(GitExtensionsPath)\GitUIPluginInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="ResourceManager">
-      <HintPath>..\..\references\GitExtensions\ResourceManager.dll</HintPath>
+      <HintPath>$(GitExtensionsPath)\ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows.Forms" />
@@ -53,15 +54,9 @@
     </EmbeddedResource>
   </ItemGroup>
   
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="powershell.exe -ExecutionPolicy Unrestricted ..\..\tools\Download-GitExtensions.ps1 -Version $(GitExtensionsReferenceVersion) -Source $(GitExtensionsReferenceSource)" />
-  </Target>
-  <Target Name="CopyPackageManager" AfterTargets="ResolveReferences">
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFolder="$(TargetDir)PackageManager" />
-  </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetDir)$(PackageManagerTargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)PackageManager" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GitExtensionsDebugPluginsPath)" />
+  <Target Name="CopyPackageManager" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(TargetDir)$(PackageManagerTargetPath)" />
+    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(PackageManagerTargetPath)" />
   </Target>
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
