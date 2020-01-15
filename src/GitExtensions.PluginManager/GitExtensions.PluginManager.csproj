@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitExtensions.Extensibility" Version="0.1.1" />
+    <PackageReference Include="GitExtensions.Extensibility" Version="0.1.*" />
   </ItemGroup>
 
   <ItemGroup>
