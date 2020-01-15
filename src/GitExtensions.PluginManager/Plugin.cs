@@ -29,6 +29,7 @@ namespace GitExtensions.PluginManager
         internal PluginSettings Configuration { get; private set; }
 
         public Plugin()
+            : base(PluginSettings.HasProperties)
         {
             Name = "Plugin Manager";
             Description = "Plugin Manager";
