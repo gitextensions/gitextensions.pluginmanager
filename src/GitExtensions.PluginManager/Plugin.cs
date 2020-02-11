@@ -72,7 +72,7 @@ namespace GitExtensions.PluginManager
                 Application.Exit();
             }
 
-            return true;
+            return false;
         }
 
         private void CloseAllOtherInstances()
