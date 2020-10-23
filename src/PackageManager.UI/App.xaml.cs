@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Neptuo.Activators;
@@ -105,7 +104,14 @@ namespace PackageManager
             wnd.Show();
 
             if (Args.IsSelfUpdate)
+            {
                 RunSelfUpdate(wnd);
+            }
+            else
+            {
+                wnd.ViewModel.Browser.Search
+                    .Execute();
+            }
         }
 
         private void BuildExceptionHandler()
