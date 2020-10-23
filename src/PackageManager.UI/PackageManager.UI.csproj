@@ -5,6 +5,7 @@
     <AssemblyName>PackageManager.UI</AssemblyName>
     <TargetFramework>net461</TargetFramework>
     <ApplicationIcon>Views\Assets\box-search-result.ico</ApplicationIcon>
+    <StartupObject>PackageManager.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
