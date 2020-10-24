@@ -2,9 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitExtensions.PluginManager
 {
@@ -13,7 +10,7 @@ namespace GitExtensions.PluginManager
         /// <summary>
         /// Gets a property holding if asking to close git extensions is required.
         /// </summary>
-        public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of Git Extensions before starting Plugin Manager", false);
+        public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Automatically close Git Extensions when installing plugins", false);
 
         private readonly ISettingsSource source;
 
