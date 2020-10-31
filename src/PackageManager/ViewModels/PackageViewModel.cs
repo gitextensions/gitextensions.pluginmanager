@@ -5,10 +5,9 @@ using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PackageManager.ViewModels
 {
@@ -25,6 +24,10 @@ namespace PackageManager.ViewModels
         public string Description => model.Description;
         public string Authors => model.Authors;
         public DateTime? Published => model.Published;
+        public Visibility PublishedVisibility => Published is null
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
         public string Tags => model.Tags;
         public Uri IconUrl => model.IconUrl;
         public Uri ProjectUrl => model.ProjectUrl;
