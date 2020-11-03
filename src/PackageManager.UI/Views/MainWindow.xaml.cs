@@ -2,19 +2,8 @@
 using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PackageManager.Views
 {
@@ -22,11 +11,12 @@ namespace PackageManager.Views
     {
         private readonly ProcessService processes;
         private readonly Navigator navigator;
+        private readonly bool closeWithConfirmation;
 
         public MainViewModel ViewModel
             => (MainViewModel)DataContext;
 
-        internal MainWindow(MainViewModel viewModel, ProcessService processes, Navigator navigator)
+        internal MainWindow(MainViewModel viewModel, ProcessService processes, Navigator navigator, bool closeWithConfirmation)
         {
             Ensure.NotNull(viewModel, "viewModel");
             Ensure.NotNull(processes, "processes");
@@ -34,6 +24,7 @@ namespace PackageManager.Views
             DataContext = viewModel;
             this.processes = processes;
             this.navigator = navigator;
+            this.closeWithConfirmation = closeWithConfirmation;
             InitializeViewModel();
 
             InitializeComponent();
@@ -51,14 +42,27 @@ namespace PackageManager.Views
             var context = processes.PrepareContextForProcessesKillBeforeChange();
             if (context.IsExecutable)
             {
-                bool result = navigator.Confirm(
-                    "Plugin Manager",
-                    "Plugin Manager is going to write to files that are holded by other executables. " + Environment.NewLine +
-                    "Do you want to kill all instances of these applications?"
-                );
+                if (this.closeWithConfirmation)
+                {
+                    bool result = navigator.Confirm(
+                        "Plugin Manager",
+                        "Plugin Manager is going to write to files that are holded by other executables. " + Environment.NewLine +
+                        "Do you want to kill all instances of these applications?"
+                    );
 
-                if (result)
+                    if (result)
+                    {
+                        context.Execute();
+                    }
+                    else
+                    {
+                        return Task.FromResult(false);
+                    }
+                }
+                else
+                {
                     context.Execute();
+                }
             }
 
             return Task.FromResult(true);

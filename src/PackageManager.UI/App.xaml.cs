@@ -99,7 +99,7 @@ namespace PackageManager
                 NuGetPackageVersionComparer.Instance
             );
 
-            var wnd = new MainWindow(viewModel, ProcessService, Navigator);
+            var wnd = new MainWindow(viewModel, ProcessService, Navigator, Args.CloseInstancesWithConfirmation);
 
             wnd.Show();
 

@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager
 {
     public partial class Args : ICloneable<Args>
     {
+        private const string CloseConfirmationArgument = "--close-confirmation";
+
         public string Path { get; set; }
         public IReadOnlyCollection<string> Monikers { get; set; }
         public IReadOnlyCollection<Dependency> Dependencies { get; set; }
@@ -20,6 +21,7 @@ namespace PackageManager
         public string Tags { get; set; }
 
         public IReadOnlyCollection<string> ProcessNamesToKillBeforeChange { get; set; }
+        public bool CloseInstancesWithConfirmation { get; set; }
 
         public Args()
         {
@@ -46,6 +48,12 @@ namespace PackageManager
                 if (arg == "--selfupdate")
                 {
                     IsSelfUpdate = true;
+                    items.Remove(arg);
+                }
+
+                if (arg == CloseConfirmationArgument)
+                {
+                    CloseInstancesWithConfirmation = true;
                     items.Remove(arg);
                 }
             }
@@ -89,6 +97,9 @@ namespace PackageManager
                     return true;
                 case "--processnamestokillbeforechange":
                     ProcessNamesToKillBeforeChange = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    return true;
+                case CloseConfirmationArgument:
+                    CloseInstancesWithConfirmation = true;
                     return true;
                 default:
                     return false;
@@ -153,6 +164,11 @@ namespace PackageManager
             if (ProcessNamesToKillBeforeChange != null && ProcessNamesToKillBeforeChange.Count > 0)
                 result.Append($" --processnamestokillbeforechange \"{string.Join(",", ProcessNamesToKillBeforeChange)}\"");
 
+            if (CloseInstancesWithConfirmation)
+            {
+                result.Append($" {CloseConfirmationArgument}");
+            }
+
             return result.ToString();
         }
 
@@ -167,7 +183,8 @@ namespace PackageManager
                 IsSelfUpdate = IsSelfUpdate,
                 SelfOriginalPath = SelfOriginalPath,
                 SelfUpdateVersion = SelfUpdateVersion,
-                ProcessNamesToKillBeforeChange = ProcessNamesToKillBeforeChange
+                ProcessNamesToKillBeforeChange = ProcessNamesToKillBeforeChange,
+                CloseInstancesWithConfirmation = CloseInstancesWithConfirmation
             };
         }
 

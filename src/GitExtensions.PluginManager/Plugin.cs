@@ -4,14 +4,9 @@ using PackageManager;
 using ResourceManager;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace GitExtensions.PluginManager
 {
@@ -57,6 +52,7 @@ namespace GitExtensions.PluginManager
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
             args.ProcessNamesToKillBeforeChange = new[] { Process.GetCurrentProcess().ProcessName };
+            args.CloseInstancesWithConfirmation = !Configuration.CloseInstances;
 
             ProcessStartInfo info = new ProcessStartInfo()
             {
@@ -66,30 +62,7 @@ namespace GitExtensions.PluginManager
             };
             Process.Start(info);
 
-            if (Configuration.CloseInstances)
-            {
-                CloseAllOtherInstances();
-                Application.Exit();
-            }
-
             return false;
-        }
-
-        private void CloseAllOtherInstances()
-        {
-            Process current = Process.GetCurrentProcess();
-            foreach (Process other in Process.GetProcesses())
-            {
-                try
-                {
-                    if (other.MainModule.FileName == current.MainModule.FileName && other.Id != current.Id)
-                        other.Kill();
-                }
-                catch (Win32Exception)
-                {
-                    continue;
-                }
-            }
         }
     }
 }
