@@ -53,8 +53,7 @@ namespace PackageManager.Views
             {
                 bool result = navigator.Confirm(
                     "Plugin Manager",
-                    "Plugin Manager is going to write to files that are holded by other executables. " + Environment.NewLine +
-                    "Do you want to kill all instances of these applications?"
+                    "Plugin Manager will be writing to files that are currently in use.\r\n\r\nDo you want to stop all instances of the application?"
                 );
 
                 if (result)
