@@ -18,8 +18,13 @@ namespace PackageManager.Services
             public ProcessKillContext(IReadOnlyCollection<string> names)
             {
                 Ensure.NotNull(names, "names");
+                ProcessNames = names;
                 targets = names.SelectMany(name => Process.GetProcessesByName(name)).ToList();
             }
+
+            public IReadOnlyCollection<string> ProcessNames { get; }
+            
+            public int ProcessCount { get => targets.Count; }
 
             public bool IsExecutable => targets.Count > 0;
 
