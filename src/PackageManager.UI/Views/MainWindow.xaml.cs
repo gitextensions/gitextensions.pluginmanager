@@ -51,10 +51,13 @@ namespace PackageManager.Views
             var context = processes.PrepareContextForProcessesKillBeforeChange();
             if (context.IsExecutable)
             {
+                var processNames = string.Join(" and ", context.ProcessNames);
+                if (context.ProcessCount > 1 || context.ProcessNames.Count > 1)
+                    processNames = $"all instances of {processNames}";
+
                 bool result = navigator.Confirm(
                     "Plugin Manager",
-                    "Plugin Manager is going to write to files that are holded by other executables. " + Environment.NewLine +
-                    "Do you want to kill all instances of these applications?"
+                    $"Plugin Manager will be writing to files that are currently in use.\r\n\r\nDo you want to stop {processNames}?"
                 );
 
                 if (result)
