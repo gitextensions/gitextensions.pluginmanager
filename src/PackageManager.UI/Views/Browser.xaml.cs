@@ -1,7 +1,6 @@
 ﻿using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +35,38 @@ namespace PackageManager.Views
         {
             Browser view = (Browser)d;
             view.OnViewModelChanged((BrowserViewModel)e.OldValue, (BrowserViewModel)e.NewValue);
+        }
+
+
+        internal PackageViewModel SelectedPackage
+        {
+            get { return (PackageViewModel)GetValue(SelectedPackageProperty); }
+            set { SetValue(SelectedPackageProperty, value); }
+        }
+
+        internal static readonly DependencyProperty SelectedPackageProperty = DependencyProperty.Register(
+            "SelectedPackage", 
+            typeof(PackageViewModel), 
+            typeof(Browser), 
+            new PropertyMetadata(null)
+        );
+
+
+        internal PackageViewModel SelectedVersion
+        {
+            get { return (PackageViewModel)GetValue(SelectedVersionProperty); }
+            set { SetValue(SelectedVersionProperty, value); }
+        }
+
+        internal static readonly DependencyProperty SelectedVersionProperty = DependencyProperty.Register(
+            "SelectedVersion", 
+            typeof(PackageViewModel), 
+            typeof(Browser), 
+            new PropertyMetadata(null, OnSelectedVersionChanged)
+        );
+
+        private static void OnSelectedVersionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
         }
 
         public Browser()
@@ -74,14 +105,11 @@ namespace PackageManager.Views
             UpdateInitialMessage(false);
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.AbsoluteUri);
-            e.Handled = true;
-        }
-
         private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            => RaiseCanExecuteChangedOnCommands();
+        {
+            SelectedVersion = (PackageViewModel)lvwPackages.SelectedItem;
+            RaiseCanExecuteChangedOnCommands();
+        }
 
         private void cbxVersions_SelectionChanged(object sender, SelectionChangedEventArgs e)
             => RaiseCanExecuteChangedOnCommands();
