@@ -37,6 +37,21 @@ namespace PackageManager.Views
             view.OnViewModelChanged((UpdatesViewModel)e.OldValue, (UpdatesViewModel)e.NewValue);
         }
 
+
+        internal PackageUpdateViewModel SelectedPackage
+        {
+            get { return (PackageUpdateViewModel)GetValue(SelectedPackageProperty); }
+            set { SetValue(SelectedPackageProperty, value); }
+        }
+
+        internal static readonly DependencyProperty SelectedPackageProperty = DependencyProperty.Register(
+            "SelectedPackage", 
+            typeof(PackageUpdateViewModel), 
+            typeof(Updates), 
+            new PropertyMetadata(null)
+        );
+
+
         public Updates()
         {
             InitializeComponent();
@@ -60,6 +75,11 @@ namespace PackageManager.Views
         { 
             lvwPackages.Focus();
             await ViewModel.Refresh.ExecuteAsync();
+        }
+
+        private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.Update.RaiseCanExecuteChanged();
         }
     }
 }

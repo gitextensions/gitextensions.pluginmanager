@@ -1,4 +1,5 @@
-﻿using PackageManager.ViewModels;
+﻿using PackageManager.Models;
+using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,20 @@ namespace PackageManager.Views
             view.OnViewModelChanged((InstalledViewModel)e.OldValue, (InstalledViewModel)e.NewValue);
         }
 
+
+        internal IInstalledPackage SelectedPackage
+        {
+            get { return (IInstalledPackage)GetValue(SelectedPackageProperty); }
+            set { SetValue(SelectedPackageProperty, value); }
+        }
+
+        internal static readonly DependencyProperty SelectedPackageProperty = DependencyProperty.Register(
+            "SelectedPackage",
+            typeof(IInstalledPackage),
+            typeof(Installed),
+            new PropertyMetadata(null)
+        );
+
         public Installed()
         {
             InitializeComponent();
@@ -60,6 +75,12 @@ namespace PackageManager.Views
         {
             ViewModel.Refresh.Execute();
             lvwPackages.Focus();
+        }
+
+        private void lvwPackages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.Uninstall.RaiseCanExecuteChanged();
+            ViewModel.Reinstall.RaiseCanExecuteChanged();
         }
     }
 }

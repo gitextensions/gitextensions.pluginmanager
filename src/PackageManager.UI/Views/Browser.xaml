@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
              xmlns:controls="clr-namespace:PackageManager.Views.Controls"
+             xmlns:views="clr-namespace:PackageManager.Views"
              mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Browser}}" Background="White">
     <DockPanel x:Name="MainPanel">
         <StackPanel Margin="8" DockPanel.Dock="Top">
@@ -41,7 +42,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <ListView x:Name="lvwPackages" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView x:Name="lvwPackages" SelectedItem="{Binding SelectedPackage, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:Browser}}" ItemsSource="{Binding Packages}" SelectionChanged="lvwPackages_SelectionChanged" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Padding="8">
@@ -78,105 +79,39 @@
                 </Border>
 
                 <Border BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="4,4,8,8" Grid.Column="1">
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="8" DataContext="{Binding SelectedItem, ElementName=lvwPackages}" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.PackageViewModel}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel.DataContext>
+                    <DockPanel Margin="8">
+                        <views:PackageName DockPanel.Dock="Top">
+                            <views:PackageName.Model>
+                                <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                    <Binding Path="SelectedVersion.Model" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:Browser}" />
+                                    <Binding Path="SelectedPackage.Model" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:Browser}" />
+                                </MultiBinding>
+                            </views:PackageName.Model>
+                        </views:PackageName>
+                        <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:Browser}}" Margin="0,8" Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                            <Button Content="Install" Command="{Binding ViewModel.Install}" Margin="0,0,8,0">
+                                <Button.CommandParameter>
                                     <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
-                                        <Binding Path="SelectedItem" ElementName="cbxVersions" />
-                                        <Binding />
+                                        <Binding Path="SelectedVersion.Model" />
+                                        <Binding Path="SelectedPackage.Model" />
                                     </MultiBinding>
-                                </StackPanel.DataContext>
-                                
-                                <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
-                                <TextBox Text="{Binding Id, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" FontSize="20" VerticalAlignment="Center" />
-                            </StackPanel>
+                                </Button.CommandParameter>
+                            </Button>
 
-                            <Grid Margin="0,8">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Content="Install" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=DataContext.Install}" Margin="0,0,8,0">
-                                        <Button.CommandParameter>
-                                            <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
-                                                <Binding Path="SelectedItem.Model" ElementName="cbxVersions" />
-                                                <Binding Path="Model" />
-                                            </MultiBinding>
-                                        </Button.CommandParameter>
-                                    </Button>
-
-                                    <Button Content="Other versions.." Command="{Binding LoadVersions}" Visibility="{Binding AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
-                                    <ComboBox x:Name="cbxVersions" ItemsSource="{Binding Versions}" SelectedItem="{Binding Mode=OneWay}" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
-                                     SelectionChanged="cbxVersions_SelectionChanged"
-                                     Visibility="{Binding AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
-                                </StackPanel>
-                            </Grid>
-
-                            <StackPanel>
-                                <StackPanel.DataContext>
-                                    <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
-                                        <Binding Path="SelectedItem" ElementName="cbxVersions" />
-                                        <Binding />
-                                    </MultiBinding>
-                                </StackPanel.DataContext>
-                                
-                                <TextBox Text="{Binding Description, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" TextWrapping="Wrap" />
-
-                                <Grid Margin="0,8,0,0">
-                                    <Grid.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="TextWrapping" Value="Wrap" />
-                                        </Style>
-                                    </Grid.Resources>
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.5*"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-
-                                    <!-- Version -->
-                                    <Label Grid.Row="0" Grid.Column="0" Content="Version:" />
-                                    <TextBlock Grid.Row="0" Grid.Column="1">
-                                        <Run Text="v" /><Run Text="{Binding Version, Mode=OneWay}" />
-                                    </TextBlock>
-
-                                    <!-- Authors -->
-                                    <Label Grid.Row="1" Grid.Column="0" Content="Authors:" />
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Authors, Mode=OneWay}" />
-
-                                    <!-- License URL -->
-                                    <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
-                                    <TextBlock Grid.Row="2" Grid.Column="1">
-                                        <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" ToolTip="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
-                                            <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
-                                        </Hyperlink>
-                                    </TextBlock>
-
-                                    <!-- Published Date -->
-                                    <Label Grid.Row="3" Grid.Column="0" Content="Published Date:" Visibility="{Binding Published, Converter={StaticResource NullToCollapsedConverter}}"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Published, Mode=OneWay}" Visibility="{Binding Published, Converter={StaticResource NullToCollapsedConverter}}" />
-
-                                    <!-- Project URL -->
-                                    <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
-                                    <TextBlock Grid.Row="4" Grid.Column="1">
-                                        <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" ToolTip="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
-                                            <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
-                                        </Hyperlink>
-                                    </TextBlock>
-
-                                    <!-- Tags -->
-                                    <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
-                                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" Margin="0,0,0,8" />
-                                </Grid>
-                            </StackPanel>
+                            <Button Content="Other versions.." Command="{Binding SelectedPackage.LoadVersions}" Visibility="{Binding SelectedPackage.AreVersionsLoaded, Converter={StaticResource FalseToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
+                            <ComboBox ItemsSource="{Binding SelectedPackage.Versions}" SelectedItem="{Binding SelectedVersion}" DisplayMemberPath="Version" ItemStringFormat="{}v{0}" 
+                             SelectionChanged="cbxVersions_SelectionChanged"
+                             Visibility="{Binding SelectedPackage.AreVersionsLoaded, Converter={StaticResource TrueToVisibleConverter}}" MinWidth="100" MaxWidth="100" />
                         </StackPanel>
-                    </ScrollViewer>
+                        <views:PackageDetail>
+                            <views:PackageDetail.Model>
+                                <MultiBinding Converter="{StaticResource FirstNotNullMultiConverter}">
+                                    <Binding Path="SelectedVersion.Model" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:Browser}" />
+                                    <Binding Path="SelectedPackage.Model" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:Browser}" />
+                                </MultiBinding>
+                            </views:PackageDetail.Model>
+                        </views:PackageDetail>
+                    </DockPanel>
                 </Border>
             </Grid>
 

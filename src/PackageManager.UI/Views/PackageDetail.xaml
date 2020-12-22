@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="PackageManager.Views.PackageDetail" x:Name="root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+             xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="350" Background="White">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
+            <TextBox Text="{Binding Description, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" TextWrapping="Wrap" />
+
+            <Grid Margin="0,8,0,0">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </Grid.Resources>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- Version -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Version:" />
+                <TextBlock Grid.Row="0" Grid.Column="1">
+                    <Run Text="v" /><Run Text="{Binding Version, Mode=OneWay}" />
+                </TextBlock>
+
+                <!-- Authors -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Authors:" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Authors, Mode=OneWay}" />
+
+                <!-- License URL -->
+                <Label Grid.Row="2" Grid.Column="0" Content="License URL:" />
+                <TextBlock Grid.Row="2" Grid.Column="1">
+                    <Hyperlink NavigateUri="{Binding LicenseUrl, Mode=OneWay}" ToolTip="{Binding LicenseUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="{Binding LicenseUrl, Mode=OneWay}"/>
+                    </Hyperlink>
+                </TextBlock>
+
+                <!-- Published Date -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Published Date:" Visibility="{Binding Published, Converter={StaticResource NullToCollapsedConverter}}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Published, Mode=OneWay}" Visibility="{Binding Published, Converter={StaticResource NullToCollapsedConverter}}" />
+
+                <!-- Project URL -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Project URL:" />
+                <TextBlock Grid.Row="4" Grid.Column="1">
+                    <Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneWay}" ToolTip="{Binding ProjectUrl, Mode=OneWay}" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="{Binding ProjectUrl, Mode=OneWay}"/>
+                    </Hyperlink>
+                </TextBlock>
+
+                <!-- Tags -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Tags:" />
+                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Tags, Mode=OneWay}" Margin="0,0,0,8" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

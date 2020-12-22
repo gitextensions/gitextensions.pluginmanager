@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="PackageManager.Views.PackageName" x:Name="root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+             xmlns:dd="clr-namespace:PackageManager.Views.DesignData"
+             mc:Ignorable="d" d:DesignWidth="350" Background="White">
+    <StackPanel Orientation="Horizontal" d:DataContext="{Binding Source={x:Static dd:ViewModelLocator.Package}}" Visibility="{Binding Converter={StaticResource NullToCollapsedConverter}}">
+        <Image Source="{Binding IconUrl, Converter={StaticResource NullToDefaultIconConverter}}" Width="33" Height="34" Margin="0,4,8,0" VerticalAlignment="Top" DockPanel.Dock="Left" />
+        <TextBox Text="{Binding Id, Mode=OneWay}" Style="{StaticResource ReadOnlyTextBoxStyle}" FontSize="20" VerticalAlignment="Center" />
+    </StackPanel>
+</UserControl>
