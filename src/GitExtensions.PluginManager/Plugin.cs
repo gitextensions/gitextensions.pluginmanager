@@ -31,6 +31,7 @@ namespace GitExtensions.PluginManager
         public Plugin()
             : base(PluginSettings.HasProperties)
         {
+            Id = new Guid("9E2ECC51-AE38-4C73-9EA1-5D5D1D88022E");
             Name = "Plugin Manager";
             Description = "Plugin Manager";
             Icon = Resources.Icon;
