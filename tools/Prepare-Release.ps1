@@ -12,15 +12,18 @@ If (!$isAppveyor)
 }
 
 dotnet restore ..\GitExtensions.PluginManager.sln
-
-msbuild ..\GitExtensions.PluginManager.sln /p:Configuration=Release -verbosity:minimal
+dotnet publish ..\src\PackageManager.UI\PackageManager.UI.csproj -c Release -p:PublishProfile=FolderProfile
+dotnet publish ..\src\GitExtensions.PluginManager\GitExtensions.PluginManager.csproj --configuration Release -verbosity:minimal
 if (!($LastExitCode -eq 0))
 {
+    Pop-Location;
     Write-Error -Message "MSBuild failed with $LastExitCode" -ErrorAction Stop
 }
 
-$packPath = Join-Path ".." $targetPath;
-dotnet pack ..\src\GitExtensions.PluginManager -c Release -o $packPath --no-build
+if (!(Test-Path $targetPath))
+{
+      New-Item -ItemType Directory -Force -Path $targetPath
+}
 
 Copy-Item ..\src\GitExtensions.PluginManager\bin\Release\GitExtensions.PluginManager.*.zip $targetPath
 Copy-Item ..\src\GitExtensions.PluginManager\bin\Release\GitExtensions.PluginManager.*.nupkg $targetPath

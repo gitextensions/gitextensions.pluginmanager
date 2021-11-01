@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
     <RootNamespace>PackageManager</RootNamespace>
     <AssemblyName>PackageManager.UI</AssemblyName>
-    <TargetFramework>net461</TargetFramework>
     <ApplicationIcon>Views\Assets\box-search-result.ico</ApplicationIcon>
     <StartupObject>PackageManager.Program</StartupObject>
   </PropertyGroup>
@@ -13,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="3.1.6" />
     <PackageReference Include="Neptuo.Exceptions" Version="1.2.1" />
     <PackageReference Include="Neptuo.Observables" Version="2.0.0" />
   </ItemGroup>
@@ -49,6 +50,4 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
-  <Import Project="$(MSBuildProjectDirectory)\..\..\build\Wpf.Build.targets" />
 </Project>
