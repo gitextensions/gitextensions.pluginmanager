@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="3.1.6" />
     <PackageReference Include="Neptuo" Version="6.0.0" />
-    <PackageReference Include="NuGet.PackageManagement" Version="4.8.0" />
+    <PackageReference Include="NuGet.PackageManagement" Version="5.11.0" />
   </ItemGroup>
 
   <ItemGroup>

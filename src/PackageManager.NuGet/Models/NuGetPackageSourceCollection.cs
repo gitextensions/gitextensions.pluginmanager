@@ -36,7 +36,7 @@ namespace PackageManager.Models
             Provider.PackageSourcesChanged -= OnProviderChanged;
         }
 
-        private void OnProviderChanged(object sender, EventArgs e) 
+        private void OnProviderChanged(object sender, EventArgs e)
             => Changed?.Invoke();
 
         private NuGetPackageSource EnsureType(IPackageSource source, string argumentName = null)
@@ -48,7 +48,7 @@ namespace PackageManager.Models
             throw new InvalidPackageSourceImplementationException();
         }
 
-        private PackageSource UnWrap(IPackageSource source, string argumentName = null) 
+        private PackageSource UnWrap(IPackageSource source, string argumentName = null)
             => EnsureType(source, argumentName).Original;
 
         public IPackageSourceBuilder Add()
@@ -75,8 +75,15 @@ namespace PackageManager.Models
                 Provider.SaveActivePackageSource(UnWrap(source));
         }
 
-        internal void SavePackageSources()
-            => Provider.SavePackageSources(Sources.Select(s => s.Original));
+        internal void SavePackageSources(bool isOrderChanged = false)
+        {
+            // This is a workaround for change/bug in the underlaying package source provider,
+            // which ignores changed order. So we save an empty list and than the actual.
+            if (isOrderChanged)
+                Provider.SavePackageSources(Enumerable.Empty<PackageSource>());
+
+            Provider.SavePackageSources(Sources.Select(s => s.Original));
+        }
 
         public int MoveUp(IPackageSource source)
         {
@@ -86,7 +93,7 @@ namespace PackageManager.Models
             {
                 Sources.RemoveAt(index);
                 Sources.Insert(--index, target);
-                SavePackageSources();
+                SavePackageSources(true);
             }
 
             return index;

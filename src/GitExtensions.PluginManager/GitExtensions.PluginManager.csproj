@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <Description>NuGet-based Plugin Manager for Git Extensions</Description>
     <PackageTags>GitExtensions</PackageTags>
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
@@ -12,12 +13,14 @@
 
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\PackageManager.UI.exe</PackageManagerSourcePath>
+    <PackageManagerSourcePath>..\PackageManager.UI\bin\Release\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitExtensions.Extensibility" Version="0.1.*" />
+    <PackageReference Include="GitExtensions.Extensibility" Version="0.2.*" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,8 +37,6 @@
     <Reference Include="ResourceManager">
       <HintPath>$(GitExtensionsPath)\ResourceManager.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
   <ItemGroup>

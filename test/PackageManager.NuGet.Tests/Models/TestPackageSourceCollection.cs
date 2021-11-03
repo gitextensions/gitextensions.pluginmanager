@@ -100,7 +100,7 @@ namespace PackageManager.Models
             var sources = CreateSourceCollection();
             sources.Remove(sources.All.First());
             var test1 = sources.Add().Name("Test1").Uri(new Uri("http://test1")).Save();
-            var test2 = sources.Add().Name("Test2").Uri(new Uri("http://test1")).Save();
+            var test2 = sources.Add().Name("Test2").Uri(new Uri("http://test2")).Save();
 
             sources = CreateSourceCollection();
             test1 = sources.All.First();
