@@ -107,7 +107,7 @@ namespace PackageManager.Models
             {
                 Sources.RemoveAt(index);
                 Sources.Insert(++index, target);
-                SavePackageSources();
+                SavePackageSources(true);
             }
 
             return index;
