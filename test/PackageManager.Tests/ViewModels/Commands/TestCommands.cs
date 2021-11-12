@@ -15,7 +15,7 @@ namespace PackageManager.ViewModels.Commands
     [TestClass]
     public class TestCommands
     {
-        private const string ExtractPath = @"D:\";
+        private const string ExtractPath = @".\";
 
         [TestMethod]
         public void Install()
