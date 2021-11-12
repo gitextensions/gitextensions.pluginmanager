@@ -51,6 +51,7 @@ test_script:
 artifacts:
 - path: .\GitExtensions.PluginManager.*.zip
 - path: .\GitExtensions.PluginManager.*.nupkg
+- path: .\*.binlog
 
 #---------------------------------#
 #     deployment configuration    #
