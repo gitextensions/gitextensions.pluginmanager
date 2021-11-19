@@ -43,7 +43,6 @@ namespace PackageManager.Services
             if (resource == null)
                 return NuGetPackageFilterResult.NotCompatible;
 
-            NuGetPackageFilterResult result = NuGetPackageFilterResult.Ok;
             foreach (NuGetFramework framework in frameworks)
             {
                 SourcePackageDependencyInfo dependencyInfo = await resource.ResolvePackage(package.Identity, framework, new SourceCacheContext(), nuGetLogger, cancellationToken);
@@ -58,7 +57,7 @@ namespace PackageManager.Services
                         if (packageDependency == null)
                         {
                             log.Info($"Package '{package.Identity}' skipped: missing dependency '{dependency.Id}'.");
-                            result = NuGetPackageFilterResult.NotCompatible;
+                            return NuGetPackageFilterResult.NotCompatible;
                         }
 
                         if (dependency.Version != null && !packageDependency.VersionRange.Satisfies(new NuGetVersion(dependency.Version)))
@@ -68,7 +67,7 @@ namespace PackageManager.Services
                         }
                     }
 
-                    return result;
+                    return NuGetPackageFilterResult.Ok;
                 }
 
             }
