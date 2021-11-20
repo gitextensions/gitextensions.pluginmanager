@@ -47,7 +47,7 @@ namespace PackageManager.Services
                 ),
                 new DependencyNuGetPackageFilter(
                     new DefaultLog(),
-                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", null) },
+                    new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "0.2.0") },
                     frameworks
                 )
             );
