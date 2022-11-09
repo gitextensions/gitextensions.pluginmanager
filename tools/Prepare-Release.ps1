@@ -12,7 +12,7 @@ If (!$isAppveyor)
 }
 
 dotnet restore ..\GitExtensions.PluginManager.sln
-dotnet publish ..\src\PackageManager.UI\PackageManager.UI.csproj -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:RuntimeIdentifier=win-x86 -p:SelfContained=false -p:PublishDir=bin\Release\net5.0-windows\publish\ -bl:$targetPath\build-PackageManager.UI.binlog
+dotnet publish ..\src\PackageManager.UI\PackageManager.UI.csproj -c Release -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:RuntimeIdentifier=win-x86 -p:SelfContained=false -p:PublishDir=bin\Release\net6.0-windows\publish\ -bl:$targetPath\build-PackageManager.UI.binlog
 dotnet publish ..\src\GitExtensions.PluginManager\GitExtensions.PluginManager.csproj --configuration Release -verbosity:minimal -bl:$targetPath\build-GitExtensions.PluginManager.binlog
 if (!($LastExitCode -eq 0))
 {

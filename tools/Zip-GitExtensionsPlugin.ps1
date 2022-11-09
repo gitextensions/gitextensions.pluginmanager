@@ -17,8 +17,8 @@ $tempPmPath = Join-Path $tempPath -ChildPath "PackageManager";
 New-Item -Force -ItemType Directory $tempPath | Out-Null;
 New-Item -Force -ItemType Directory $tempPmPath | Out-Null;
 
-Copy-Item -Force ($sourceBasePath + "\net5.0-windows\GitExtensions.PluginManager.dll") $tempPath | Out-Null;
-Copy-Item -Force ($sourceBasePath + "\net5.0-windows\PackageManager\PackageManager.UI.exe") $tempPmPath | Out-Null;
+Copy-Item -Force ($sourceBasePath + "\net6.0-windows\GitExtensions.PluginManager.dll") $tempPath | Out-Null;
+Copy-Item -Force ($sourceBasePath + "\net6.0-windows\PackageManager\PackageManager.UI.exe") $tempPmPath | Out-Null;
 
 Compress-Archive -Path ($tempPath + "\*") -DestinationPath $target -Force;
 Write-Host ("Created release zip at '" + $target + "'");

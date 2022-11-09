@@ -24,7 +24,7 @@ namespace GitExtensions.PluginManager
         public const string PackageId = @"GitExtensions.PluginManager";
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PackageManager\PackageManager.UI.exe";
-        public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "any", "netstandard2.0" };
+        public static readonly List<string> FrameworkMonikers = new List<string>() { "net6.0", "any", "netstandard2.0" };
 
         internal PluginSettings Configuration { get; private set; }
 
