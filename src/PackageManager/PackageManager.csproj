@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.0" />
-    <PackageReference Include="Neptuo.Observables" Version="2.0.0" />
+    <PackageReference Include="Neptuo" Version="6.0.1" />
+    <PackageReference Include="Neptuo.Observables" Version="2.1.0" />
   </ItemGroup>
 
 </Project>
