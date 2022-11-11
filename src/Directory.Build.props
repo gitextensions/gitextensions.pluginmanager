@@ -1,6 +1,11 @@
 <!-- Do not use XML namespaces here (<Project xmlns="...">), because it would break patching of version numbers during builds on AppVeyor (https://github.com/appveyor/website/pull/409) -->
 <Project>
   <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+	
+  <PropertyGroup>
     <Authors>Git Extensions</Authors>
     <Company>Git Extensions</Company>
     <RepositoryUrl>https://github.com/gitextensions/gitextensions.pluginmanager</RepositoryUrl>

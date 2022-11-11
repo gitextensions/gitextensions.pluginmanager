@@ -18,7 +18,7 @@ skip_tags: true
 
 # Build worker image (VM template)
 image:
-- Visual Studio 2019
+- Visual Studio 2022
 
 # enable patching of Directory.Build.props
 dotnet_csproj:

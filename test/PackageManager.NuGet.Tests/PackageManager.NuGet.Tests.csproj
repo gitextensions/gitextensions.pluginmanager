@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\..\src\PackageManager.UI\Args.cs" Link="Services\Args.cs" />
     <Compile Include="..\..\src\PackageManager.UI\Models\NuGetFrameworkFilter.cs" Link="Services\NuGetFrameworkFilter.cs" />
@@ -15,22 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\PackageManager.NuGet\PackageManager.NuGet.csproj" />
     <ProjectReference Include="..\..\src\PackageManager\PackageManager.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Moq" Version="4.18.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="MSTest.TestAdapter" Version="2.2.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="MSTest.TestFramework" Version="2.2.10" />
   </ItemGroup>
 
 </Project>
