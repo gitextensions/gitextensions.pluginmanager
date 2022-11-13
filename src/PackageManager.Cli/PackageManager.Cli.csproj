@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.1" />
-    <PackageReference Include="NuGet.PackageManagement" Version="6.3.1" />
+    <PackageReference Update="Neptuo" />
+    <PackageReference Update="NuGet.PackageManagement" />
   </ItemGroup>
 
   <ItemGroup>

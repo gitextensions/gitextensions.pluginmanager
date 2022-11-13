@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.1" />
-    <PackageReference Include="Neptuo.Observables" Version="2.1.0" />
+    <PackageReference Update="Neptuo" />
+    <PackageReference Update="Neptuo.Observables" />
   </ItemGroup>
 
 </Project>
