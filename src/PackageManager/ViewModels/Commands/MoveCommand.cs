@@ -2,11 +2,7 @@
 using Neptuo.Observables.Collections;
 using Neptuo.Observables.Commands;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
@@ -28,7 +24,7 @@ namespace PackageManager.ViewModels.Commands
             sources.CollectionChanged += OnSourcesChanged;
         }
 
-        private void OnSourcesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnSourcesChanged(object? sender, NotifyCollectionChangedEventArgs e)
             => RaiseCanExecuteChanged();
 
         public override bool CanExecute(T item)

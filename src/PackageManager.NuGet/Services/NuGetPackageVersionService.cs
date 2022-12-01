@@ -8,7 +8,6 @@ using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,12 +16,12 @@ namespace PackageManager.Services
     public class NuGetPackageVersionService
     {
         private readonly INuGetPackageFilter filter;
-        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
+        private readonly NuGetPackageContent.IFrameworkFilter? frameworkFilter;
         private readonly NuGetPackageContentService contentService;
         private readonly ILog log;
         private readonly ILogger nuGetLog;
 
-        public NuGetPackageVersionService(NuGetPackageContentService contentService, ILog log, INuGetPackageFilter filter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetPackageVersionService(NuGetPackageContentService contentService, ILog log, INuGetPackageFilter? filter = null, NuGetPackageContent.IFrameworkFilter? frameworkFilter = null)
         {
             Ensure.NotNull(contentService, "contentService");
             Ensure.NotNull(log, "log");
@@ -37,7 +36,7 @@ namespace PackageManager.Services
             this.frameworkFilter = frameworkFilter;
         }
 
-        public async Task<IReadOnlyList<IPackage>> GetListAsync(int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter = null, bool isPrereleaseIncluded = false, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<IPackage>> GetListAsync(int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool>? versionFilter = null, bool isPrereleaseIncluded = false, CancellationToken cancellationToken = default)
         {
             if (versionFilter == null)
                 versionFilter = (source, target) => true;
@@ -63,7 +62,7 @@ namespace PackageManager.Services
         private async Task<bool> SearchOlderVersionsDirectlyAsync(List<IPackage> result, int resultCount, IPackageSearchMetadata package, SourceRepository repository, Func<IPackageSearchMetadata, IPackageSearchMetadata, bool> versionFilter, CancellationToken cancellationToken)
         {
             bool isSuccess = false;
-            IEnumerable<VersionInfo> versions = null;
+            IEnumerable<VersionInfo>? versions = null;
 
             try
             {
@@ -81,7 +80,7 @@ namespace PackageManager.Services
                 // TODO: Filter prelease on V2 feed.
                 if (version.PackageSearchMetadata != null && versionFilter(package, version.PackageSearchMetadata))
                 {
-                    IPackage item = await ProcessOlderVersionAsync(repository, version.PackageSearchMetadata, cancellationToken);
+                    IPackage? item = await ProcessOlderVersionAsync(repository, version.PackageSearchMetadata, cancellationToken);
                     if (item != null)
                     {
                         result.Add(item);
@@ -104,7 +103,7 @@ namespace PackageManager.Services
 
             using (var sourceCacheContext = new SourceCacheContext())
             {
-                IEnumerable<IPackageSearchMetadata> versions = await metadataResource?.GetMetadataAsync(
+                IEnumerable<IPackageSearchMetadata> versions = await metadataResource.GetMetadataAsync(
                     package.Identity.Id,
                     isPrereleaseIncluded,
                     false,
@@ -118,7 +117,7 @@ namespace PackageManager.Services
                 {
                     if (versionFilter(package, version))
                     {
-                        IPackage item = await ProcessOlderVersionAsync(repository, version, cancellationToken);
+                        IPackage? item = await ProcessOlderVersionAsync(repository, version, cancellationToken);
                         if (item != null)
                         {
                             result.Add(item);
@@ -132,7 +131,7 @@ namespace PackageManager.Services
             return true;
         }
 
-        private async Task<IPackage> ProcessOlderVersionAsync(SourceRepository repository, IPackageSearchMetadata version, CancellationToken cancellationToken)
+        private async Task<IPackage?> ProcessOlderVersionAsync(SourceRepository repository, IPackageSearchMetadata version, CancellationToken cancellationToken)
         {
             log.Debug($"Found '{version.Identity}'.");
 

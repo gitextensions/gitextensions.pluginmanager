@@ -8,9 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GitExtensions.PluginManager
@@ -26,7 +23,7 @@ namespace GitExtensions.PluginManager
         public const string PluginManagerRelativePath = @"PackageManager\PackageManager.UI.exe";
         public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "net6.0", "any", "netstandard2.0" };
 
-        internal PluginSettings Configuration { get; private set; }
+        internal PluginSettings? Configuration { get; private set; }
 
         public Plugin()
             : base(PluginSettings.HasProperties)
@@ -44,13 +41,12 @@ namespace GitExtensions.PluginManager
         }
 
         public override IEnumerable<ISetting> GetSettings()
-            => Configuration;
+            => Configuration!;
 
         public override bool Execute(GitUIEventArgs gitUiCommands)
         {
-            string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string pluginsPath = ManagedExtensibility.UserPluginsPath;
-
+            string pluginsPath = ManagedExtensibility.UserPluginsPath!;
+            
             Args args = new Args();
             args.Path = pluginsPath;
             args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "0.3.0") };
@@ -67,7 +63,7 @@ namespace GitExtensions.PluginManager
             };
             Process.Start(info);
 
-            if (Configuration.CloseInstances)
+            if (Configuration!.CloseInstances)
             {
                 CloseAllOtherInstances();
                 Application.Exit();
@@ -83,7 +79,7 @@ namespace GitExtensions.PluginManager
             {
                 try
                 {
-                    if (other.MainModule.FileName == current.MainModule.FileName && other.Id != current.Id)
+                    if (other.MainModule != null && current.MainModule != null && other.MainModule.FileName == current.MainModule.FileName && other.Id != current.Id)
                         other.Kill();
                 }
                 catch (Win32Exception)

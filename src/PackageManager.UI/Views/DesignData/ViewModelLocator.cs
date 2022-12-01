@@ -3,26 +3,23 @@ using PackageManager.Services;
 using PackageManager.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Views.DesignData
 {
     public static class ViewModelLocator
     {
-        private static SelfPackageConfiguration selfPackageConfiguration;
-        private static MainViewModel main;
-        private static BrowserViewModel browser;
-        private static InstalledViewModel installed;
-        private static UpdatesViewModel updates;
-        private static IPackage package;
-        private static IPackage newerPackage;
-        private static IInstalledPackage compatiblePackage;
-        private static IInstalledPackage incompatiblePackage;
-        private static PackageSourceViewModel packageSources;
-        private static IPackageSourceCollection packageSourceCollection;
-        private static PackageViewModel packageViewModel;
+        private static SelfPackageConfiguration? selfPackageConfiguration;
+        private static MainViewModel? main;
+        private static BrowserViewModel? browser;
+        private static InstalledViewModel? installed;
+        private static UpdatesViewModel? updates;
+        private static IPackage? package;
+        private static IPackage? newerPackage;
+        private static IInstalledPackage? compatiblePackage;
+        private static IInstalledPackage? incompatiblePackage;
+        private static PackageSourceViewModel? packageSources;
+        private static IPackageSourceCollection? packageSourceCollection;
+        private static PackageViewModel? packageViewModel;
 
         public static SelfPackageConfiguration SelfPackageConfiguration
         {

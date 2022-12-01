@@ -2,8 +2,6 @@
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +10,7 @@ namespace PackageManager.Views.DesignData
     internal class MockInstallService : IInstallService
     {
         public string Path => @"C:\Temp";
-        public IPackageIdentity Installed { get; set; }
+        public IPackageIdentity? Installed { get; set; }
 
         public bool IsInstalled(string packageId)
             => false;
@@ -37,9 +35,9 @@ namespace PackageManager.Views.DesignData
             );
         }
 
-        public Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
+        public Task<IPackageIdentity?> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
         {
-            return null;
+            return Task.FromResult<IPackageIdentity?>(null);
         }
     }
 }

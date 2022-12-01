@@ -1,10 +1,6 @@
 ﻿using Neptuo;
 using NuGet.Packaging.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
@@ -21,7 +17,7 @@ namespace PackageManager.Models
             this.identity = identity;
         }
 
-        public bool Equals(IPackageIdentity other)
+        public bool Equals(IPackageIdentity? other)
         {
             if (other == null)
                 return false;

@@ -1,11 +1,6 @@
 ﻿using Neptuo;
 using Neptuo.Observables;
 using PackageManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
@@ -33,7 +28,7 @@ namespace PackageManager.ViewModels
             Ensure.NotNull(current, "current");
             Ensure.NotNull(latest, "latest");
             Current = new PackageViewModel(current, packageOptions);
-            Target = latest;
+            target = latest;
             IsSelf = isSelf;
         }
     }

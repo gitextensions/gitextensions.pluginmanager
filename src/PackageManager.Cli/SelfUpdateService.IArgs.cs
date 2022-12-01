@@ -6,11 +6,11 @@ namespace PackageManager.Services
     {
         public interface IArgs : ICloneable<IArgs>
         {
-            string Path { get; }
+            string? Path { get; }
 
             bool IsSelfUpdate { get; set; }
-            string SelfOriginalPath { get; set; }
-            string SelfUpdateVersion { get; set; }
+            string? SelfOriginalPath { get; set; }
+            string? SelfUpdateVersion { get; set; }
         }
     }
 }

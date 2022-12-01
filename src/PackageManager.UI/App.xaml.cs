@@ -24,13 +24,13 @@ namespace PackageManager
 {
     public partial class App : Application, SelfUpdateService.IApplication, ProcessService.IApplication, IFactory<PackageSourceWindow>, IFactory<LogWindow>
     {
-        public Args Args { get; private set; }
-        internal ProcessService ProcessService { get; private set; }
-        internal IExceptionHandler ExceptionHandler { get; private set; }
-        internal Navigator Navigator { get; private set; }
-        internal ILogFactory LogFactory { get; private set; }
-        internal IPackageSourceCollection PackageSources { get; private set; }
-        internal MemoryLogSerializer MemoryLogSerializer { get; private set; }
+        public Args Args { get; private set; } = default!;
+        internal ProcessService ProcessService { get; private set; } = default!;
+        internal IExceptionHandler ExceptionHandler { get; private set; } = default!;
+        internal Navigator Navigator { get; private set; } = default!;
+        internal ILogFactory LogFactory { get; private set; } = default!;
+        internal IPackageSourceCollection PackageSources { get; private set; } = default!;
+        internal MemoryLogSerializer MemoryLogSerializer { get; private set; } = default!;
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
@@ -66,15 +66,15 @@ namespace PackageManager
 
             IReadOnlyCollection<NuGetFramework> frameworks = ParseMonikers(Args.Monikers);
             NuGetSourceRepositoryFactory repositoryFactory = new NuGetSourceRepositoryFactory();
-            INuGetPackageFilter packageFilter = null;
+            INuGetPackageFilter? packageFilter = null;
             if (Args.Dependencies.Any())
                 packageFilter = new DependencyNuGetPackageFilter(LogFactory.Scope("Filter"), Args.Dependencies, frameworks);
 
-            NuGetPackageContent.IFrameworkFilter frameworkFilter = null;
+            NuGetPackageContent.IFrameworkFilter? frameworkFilter = null;
             if (Args.Monikers.Any())
                 frameworkFilter = new NuGetFrameworkFilter(frameworks);
 
-            INuGetSearchTermTransformer termTransformer = null;
+            INuGetSearchTermTransformer? termTransformer = null;
             if (Args.Tags != null)
                 termTransformer = new TagsNuGetSearchTermTransformer(Args.Tags);
 
@@ -85,7 +85,7 @@ namespace PackageManager
             var contentService = new NuGetPackageContentService(log, frameworkFilter);
             var versionService = new NuGetPackageVersionService(contentService, log, packageFilter, frameworkFilter);
             var searchService = new NuGetSearchService(repositoryFactory, LogFactory.Scope("Search"), contentService, versionService, packageFilter, termTransformer);
-            var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, contentService, versionService, packageFilter, frameworkFilter);
+            var installService = new NuGetInstallService(repositoryFactory, LogFactory.Scope("Install"), Args.Path, contentService, versionService, packageFilter);
             var selfUpdateService = new SelfUpdateService(this, ProcessService);
 
             EnsureSelfPackageInstalled(installService);
@@ -178,7 +178,7 @@ namespace PackageManager
             updates.Refresh.Completed += async () =>
             {
                 bool canUpdate = false;
-                PackageUpdateViewModel package = updates.Packages.FirstOrDefault(p => string.Equals(p.Current.Id, Args.SelfPackageId, StringComparison.CurrentCultureIgnoreCase));
+                PackageUpdateViewModel? package = updates.Packages.FirstOrDefault(p => string.Equals(p.Current.Id, Args.SelfPackageId, StringComparison.CurrentCultureIgnoreCase));
                 if (package != null)
                 {
                     if (string.Equals(package.Target.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase))
@@ -190,7 +190,7 @@ namespace PackageManager
                         if (package.Current.LoadVersions.CanExecute())
                             package.Current.LoadVersions.Execute();
 
-                        PackageViewModel version = package.Current.Versions.FirstOrDefault(p => string.Equals(p.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase));
+                        PackageViewModel? version = package.Current.Versions.FirstOrDefault(p => string.Equals(p.Version, Args.SelfUpdateVersion, StringComparison.CurrentCultureIgnoreCase));
                         if (version != null)
                         {
                             package.Target = version.Model;
@@ -207,7 +207,7 @@ namespace PackageManager
                     Navigator.Notify("Self Update Error", $"Unnable to find update package for Plugin Manager.", Navigator.MessageType.Error);
                 }
 
-                if (canUpdate)
+                if (canUpdate && package != null)
                     await updates.Update.ExecuteAsync(package);
 
                 Shutdown();

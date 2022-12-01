@@ -1,10 +1,6 @@
 ﻿using Moq;
 using PackageManager.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +13,7 @@ namespace PackageManager.ViewModels.Commands
         public CallCounter RemoveFromAsyncCalled { get; } = new CallCounter();
         public IPackage Object { get; }
 
-        public Package(string extractPath, string id, string version = null)
+        public Package(string extractPath, string id, string? version = null)
         {
             Mock<IPackageContent> contentMock = new Mock<IPackageContent>();
             contentMock

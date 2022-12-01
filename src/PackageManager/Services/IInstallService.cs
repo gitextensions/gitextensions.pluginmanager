@@ -1,8 +1,5 @@
 ﻿using PackageManager.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,6 +16,6 @@ namespace PackageManager.Services
         void Uninstall(IPackageIdentity package);
 
         Task<IReadOnlyCollection<IInstalledPackage>> GetInstalledAsync(IEnumerable<IPackageSource> packageSources, CancellationToken cancellationToken);
-        Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken);
+        Task<IPackageIdentity?> FindInstalledAsync(string packageId, CancellationToken cancellationToken);
     }
 }

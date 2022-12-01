@@ -4,9 +4,6 @@ using PackageManager.Models;
 using PackageManager.Services;
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,8 +14,8 @@ namespace PackageManager.ViewModels.Commands
         private readonly IInstallService install;
         private readonly ISelfUpdateService selfUpdate;
 
-        public event Func<Task<bool>> Executing;
-        public event Action Completed;
+        public event Func<Task<bool>>? Executing;
+        public event Action? Completed;
 
         public UpdateCommand(IInstallService installService, ISelfUpdateService selfUpdate)
         {

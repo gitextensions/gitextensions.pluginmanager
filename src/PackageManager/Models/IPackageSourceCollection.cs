@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PackageManager.Models
+﻿namespace PackageManager.Models
 {
     /// <summary>
     /// A mutable collection of defined package sources.
@@ -16,7 +10,7 @@ namespace PackageManager.Models
         /// If <paramref name="source"/> is <c>null</c>, removed any definition of primary source.
         /// </summary>
         /// <param name="source">A source to set as primary or <c>null</c> to clear this setting.</param>
-        void MarkAsPrimary(IPackageSource source);
+        void MarkAsPrimary(IPackageSource? source);
 
         /// <summary>
         /// REturns a builder for creating a new source.

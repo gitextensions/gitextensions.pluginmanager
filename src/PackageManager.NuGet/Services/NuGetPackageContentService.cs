@@ -6,10 +6,7 @@ using NuGet.Protocol.Core.Types;
 using PackageManager.Logging;
 using PackageManager.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,9 +16,9 @@ namespace PackageManager.Services
     {
         private readonly ILog log;
         private readonly ILogger nuGetLog;
-        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
+        private readonly NuGetPackageContent.IFrameworkFilter? frameworkFilter;
 
-        public NuGetPackageContentService(ILog log, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetPackageContentService(ILog log, NuGetPackageContent.IFrameworkFilter? frameworkFilter = null)
         {
             Ensure.NotNull(log, "log");
             this.log = log.Factory.Scope("Package");

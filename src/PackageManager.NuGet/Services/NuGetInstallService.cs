@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
@@ -11,7 +10,6 @@ using Neptuo.Logging;
 using NuGet.Common;
 using NuGet.Frameworks;
 using NuGet.Packaging;
-using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using PackageManager.Logging;
@@ -27,12 +25,11 @@ namespace PackageManager.Services
         private readonly NuGetPackageVersionService versionService;
         private readonly ILogger nuGetLog;
         private readonly INuGetPackageFilter packageFilter;
-        private readonly NuGetPackageContent.IFrameworkFilter frameworkFilter;
 
         public string Path { get; }
         public string ConfigFilePath => System.IO.Path.Combine(Path, "packages.config");
 
-        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter packageFilter = null, NuGetPackageContent.IFrameworkFilter frameworkFilter = null)
+        public NuGetInstallService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, string path, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter? packageFilter = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
@@ -45,7 +42,6 @@ namespace PackageManager.Services
             Path = path;
             this.contentService = contentService;
             this.versionService = versionService;
-            this.frameworkFilter = frameworkFilter;
 
             if (packageFilter == null)
                 packageFilter = OkNuGetPackageFilter.Instance;
@@ -113,8 +109,8 @@ namespace PackageManager.Services
         {
             Ensure.NotNullOrEmpty(packageId, "packageId");
 
-            NuGetVersion version = null;
-            NuGetFramework framework = null;
+            NuGetVersion? version = null;
+            NuGetFramework? framework = null;
             ReadPackageConfig(
                 (p, cache) => 
                 {
@@ -201,11 +197,11 @@ namespace PackageManager.Services
             return result;
         }
 
-        public async Task<IPackageIdentity> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
+        public async Task<IPackageIdentity?> FindInstalledAsync(string packageId, CancellationToken cancellationToken)
         {
             log.Debug($"Finding installed packages with id '{packageId}'.");
 
-            IPackageIdentity result = null;
+            IPackageIdentity? result = null;
             await ReadPackageConfig(
                 (package, context) =>
                 {

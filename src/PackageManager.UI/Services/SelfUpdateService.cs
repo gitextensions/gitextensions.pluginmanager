@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Neptuo;
 using PackageManager.Models;
 
@@ -49,7 +45,7 @@ namespace PackageManager.Services
 
         private void RerunFromTemp(string temp, IArgs arguments)
         {
-            processes.Run(temp, arguments.ToString());
+            processes.Run(temp, arguments.ToString()!);
             application.Shutdown();
         }
 
@@ -66,7 +62,7 @@ namespace PackageManager.Services
 
         public void RunNewInstance(IPackage package)
         {
-            string target = null;
+            string? target = null;
             if (application.Args.SelfOriginalPath != null)
             {
                 target = application.Args.SelfOriginalPath;
@@ -74,7 +70,7 @@ namespace PackageManager.Services
             else
             {
                 target = Directory
-                    .EnumerateFiles(application.Args.Path, CurrentFileName, SearchOption.AllDirectories)
+                    .EnumerateFiles(application.Args.Path!, CurrentFileName, SearchOption.AllDirectories)
                     .FirstOrDefault();
             }
 
@@ -83,9 +79,9 @@ namespace PackageManager.Services
                 IArgs args = application.Args.Clone();
 
                 args.IsSelfUpdate = false;
-                args.SelfUpdateVersion = null;
+                args.SelfUpdateVersion = null!;
 
-                string arguments = args.ToString();
+                string arguments = args.ToString()!;
                 processes.Run(target, arguments);
             }
         }

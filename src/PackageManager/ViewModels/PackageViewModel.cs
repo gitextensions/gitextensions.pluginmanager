@@ -70,9 +70,9 @@ namespace PackageManager.ViewModels
         private bool CanLoadVersions()
             => !AreVersionsLoaded;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            PackageViewModel other = obj as PackageViewModel;
+            PackageViewModel? other = obj as PackageViewModel;
             if (other == null)
                 return false;
 

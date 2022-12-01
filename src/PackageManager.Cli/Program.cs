@@ -12,9 +12,7 @@ namespace PackageManager.Cli
 {
     class Program : SelfUpdateService.IApplication, ProcessService.IApplication
     {
-        static Task Main(string[] args) => new Program().MainAsync(args);
-
-        public Args Args { get; private set; }
+        public Args Args { get; private set; } = default!;
 
         SelfUpdateService.IArgs SelfUpdateService.IApplication.Args => Args;
         object ProcessService.IApplication.Args => Args;
@@ -40,7 +38,7 @@ namespace PackageManager.Cli
                 UpdatesViewModel viewModel = CreateUpdatesViewModel();
                 await viewModel.Refresh.ExecuteAsync();
 
-                PackageUpdateViewModel packageModel = viewModel.Packages.FirstOrDefault(p => string.Equals(p.Target.Id, Args.PackageId, StringComparison.CurrentCultureIgnoreCase));
+                PackageUpdateViewModel? packageModel = viewModel.Packages.FirstOrDefault(p => string.Equals(p.Target.Id, Args.PackageId, StringComparison.CurrentCultureIgnoreCase));
                 if (packageModel != null && viewModel.Update.CanExecute(packageModel))
                 {
                     await viewModel.Update.ExecuteAsync(packageModel);
@@ -65,7 +63,7 @@ namespace PackageManager.Cli
             var versionService = new NuGetPackageVersionService(contentService, log);
 
             var repositoryFactory = new NuGetSourceRepositoryFactory();
-            var installService = new NuGetInstallService(repositoryFactory, log, Args.Path, contentService, versionService);
+            var installService = new NuGetInstallService(repositoryFactory, log, Args.Path!, contentService, versionService);
             var searchService = new NuGetSearchService(repositoryFactory, log, contentService, versionService);
             var selfPackageConfiguration = new SelfPackageConfiguration(Args.SelfPackageId);
             var selfUpdateService = new SelfUpdateService(this, new ProcessService(this, Array.Empty<string>()));
