@@ -7,6 +7,11 @@
     <AssemblyName>PackageManager.UI</AssemblyName>
     <ApplicationIcon>Views\Assets\box-search-result.ico</ApplicationIcon>
     <StartupObject>PackageManager.Program</StartupObject>
+  
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>
