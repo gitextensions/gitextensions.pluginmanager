@@ -3,6 +3,8 @@ using Neptuo.Observables.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
@@ -34,7 +36,7 @@ namespace PackageManager.ViewModels.Commands
                 command.CanExecuteChanged += OnCanExecuteChanged;
         }
 
-        private void OnCanExecuteChanged(object? sender, EventArgs e)
+        private void OnCanExecuteChanged(object sender, EventArgs e)
             => RaiseCanExecuteChanged();
 
         public override bool CanExecute()

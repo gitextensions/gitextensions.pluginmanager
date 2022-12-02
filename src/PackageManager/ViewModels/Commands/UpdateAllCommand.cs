@@ -1,7 +1,10 @@
 ﻿using Neptuo;
 using Neptuo.Observables.Commands;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +22,7 @@ namespace PackageManager.ViewModels.Commands
             viewModel.Packages.CollectionChanged += OnPackagesChanged;
         }
 
-        private void OnPackagesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void OnPackagesChanged(object sender, NotifyCollectionChangedEventArgs e)
             => RaiseCanExecuteChanged();
 
         protected override bool CanExecuteOverride()
@@ -27,7 +30,7 @@ namespace PackageManager.ViewModels.Commands
 
         protected async override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            PackageUpdateViewModel? selfUpdate = null;
+            PackageUpdateViewModel selfUpdate = null;
 
             foreach (PackageUpdateViewModel package in viewModel.Packages.ToList())
             {

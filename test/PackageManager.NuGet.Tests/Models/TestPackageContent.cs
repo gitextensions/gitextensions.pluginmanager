@@ -1,8 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PackageManager.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
@@ -12,9 +16,9 @@ namespace PackageManager.Models
         public const string ConfigFilePath = "PackageSource_Content.config";
         public static string ExtractPath => Path.Combine(Environment.CurrentDirectory, "UserPlugins");
 
-        private ISearchService? search;
-        private IPackageSourceCollection? sources;
-        private IPackage? package;
+        private ISearchService search;
+        private IPackageSourceCollection sources;
+        private IPackage package;
 
         [TestInitialize]
         public void Initialize()
@@ -30,7 +34,7 @@ namespace PackageManager.Models
         [TestMethod]
         public void ExtractToAsync()
         {
-            IPackageContent packageContent = package!.GetContentAsync(default).Result;
+            IPackageContent packageContent = package.GetContentAsync(default).Result;
             packageContent.ExtractToAsync(ExtractPath, default).Wait();
 
             Assert.IsTrue(File.Exists(Path.Combine(ExtractPath, "PluginA-2.txt")));
@@ -41,7 +45,7 @@ namespace PackageManager.Models
         {
             ExtractToAsync();
 
-            IPackageContent packageContent = package!.GetContentAsync(default).Result;
+            IPackageContent packageContent = package.GetContentAsync(default).Result;
             packageContent.RemoveFromAsync(ExtractPath, default).Wait();
 
             Assert.IsFalse(File.Exists(Path.Combine(ExtractPath, "PluginA-2.txt")));

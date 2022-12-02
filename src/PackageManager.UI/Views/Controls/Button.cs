@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -30,7 +34,7 @@ namespace PackageManager.Views.Controls
             if (size != null)
             {
                 ContentControl view = (ContentControl)d;
-                Image? image = FindImage(view);
+                Image image = FindImage(view);
                 if (image != null)
                     image.Width = image.Height = size.Value;
             }
@@ -84,19 +88,20 @@ namespace PackageManager.Views.Controls
         }
 
 
-        private static Image? FindImage(ContentControl view)
+        private static Image FindImage(ContentControl view)
         {
             if (view.Content is Image image)
                 return image;
 
             if (view.Content is StackPanel panel)
-                return panel.Children.OfType<Image>().FirstOrDefault();
+                return image = panel.Children.OfType<Image>().FirstOrDefault();
 
             return null;
         }
 
-        private static void UpdateContent(ContentControl view, Image? image, TextBlock? text)
+        private static void UpdateContent(ContentControl view, Image image, TextBlock text)
         {
+
             if (image == null)
             {
                 ImageSource imageSource = GetImage(view);
@@ -155,7 +160,7 @@ namespace PackageManager.Views.Controls
         private static void OnEnabledChangedUpdateImage(object sender, DependencyPropertyChangedEventArgs e)
         {
             ContentControl view = (ContentControl)sender;
-            Image? image = FindImage(view);
+            Image image = FindImage(view);
             if (image != null)
                 image.Opacity = view.IsEnabled ? 1 : 0.6;
         }

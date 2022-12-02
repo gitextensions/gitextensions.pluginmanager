@@ -1,19 +1,24 @@
-﻿using PackageManager.Models;
+﻿using Neptuo;
+using PackageManager.Models;
 using PackageManager.Services;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace PackageManager.Views.Converters
 {
     public class SelfPackageConverter : IValueConverter
     {
-        public static SelfPackageConfiguration? Configuration { get; set; }
+        public static SelfPackageConfiguration Configuration { get; set; }
 
-        public object? TrueValue { get; set; }
-        public object? FalseValue { get; set; }
+        public object TrueValue { get; set; }
+        public object FalseValue { get; set; }
 
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (IsSelfPackage(value))
                 return TrueValue;
@@ -26,7 +31,7 @@ namespace PackageManager.Views.Converters
             if (Configuration == null)
                 return false;
 
-            string? packageId = value as string;
+            string packageId = value as string;
             if (packageId == null)
             {
                 var package = value as IPackageIdentity;

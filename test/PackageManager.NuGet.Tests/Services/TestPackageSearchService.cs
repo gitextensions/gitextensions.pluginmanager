@@ -1,7 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PackageManager.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
@@ -10,8 +14,8 @@ namespace PackageManager.Services
     {
         public const string ConfigFilePath = "PackageSource_Search.config";
 
-        private ISearchService search = default!;
-        private IPackageSourceCollection sources = default!;
+        private ISearchService search;
+        private IPackageSourceCollection sources;
 
         [TestInitialize]
         public void Initialize()
@@ -38,7 +42,7 @@ namespace PackageManager.Services
         [TestMethod]
         public void FindLatestVersionAsync()
         {
-            IPackage? package = search.FindLatestVersionAsync(sources.All, search.SearchAsync(sources.All, "PluginA").Result.First()).Result;
+            IPackage package = search.FindLatestVersionAsync(sources.All, search.SearchAsync(sources.All, "PluginA").Result.First()).Result;
             Assert.IsNotNull(package);
         }
     }

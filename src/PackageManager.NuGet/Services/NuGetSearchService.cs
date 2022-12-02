@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Neptuo;
@@ -26,7 +27,7 @@ namespace PackageManager.Services
         private readonly INuGetPackageFilter filter;
         private readonly INuGetSearchTermTransformer queryTransformer;
 
-        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter? filter = null, INuGetSearchTermTransformer? termTransformer = null)
+        public NuGetSearchService(IFactory<SourceRepository, IPackageSource> repositoryFactory, ILog log, NuGetPackageContentService contentService, NuGetPackageVersionService versionService, INuGetPackageFilter filter = null, INuGetSearchTermTransformer termTransformer = null)
         {
             Ensure.NotNull(repositoryFactory, "repositoryFactory");
             Ensure.NotNull(log, "log");
@@ -45,7 +46,7 @@ namespace PackageManager.Services
             this.queryTransformer = termTransformer ?? EmptyNuGetSearchTermTransformer.Instance;
         }
 
-        private SearchOptions EnsureOptions(SearchOptions? options)
+        private SearchOptions EnsureOptions(SearchOptions options)
         {
             if (options == null)
             {
@@ -59,7 +60,7 @@ namespace PackageManager.Services
             return options;
         }
 
-        public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string? searchText, SearchOptions? options = default, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IPackage>> SearchAsync(IEnumerable<IPackageSource> packageSources, string searchText, SearchOptions options = default, CancellationToken cancellationToken = default)
         {
             var (feedTerm, localTerm) = PrepareSearchTerms(searchText);
 
@@ -117,27 +118,23 @@ namespace PackageManager.Services
         /// <remarks>
         /// localTerm should always have all search terms.
         /// </remarks>
-        private (NuGetSearchTerm? feedTerm, NuGetSearchTerm? localTerm) PrepareSearchTerms(string? searchText)
+        private (NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm) PrepareSearchTerms(string searchText)
         {
             NuGetSearchTerm feedTerm = new NuGetSearchTerm();
-            if (searchText != null)
-                feedTerm.Id.Add(searchText);
+            feedTerm.Id.Add(searchText);
 
             queryTransformer.Transform(feedTerm);
-            if (searchText != null)
-                feedTerm.Id.Remove(searchText);
+            feedTerm.Id.Remove(searchText);
 
-            NuGetSearchTerm? localTerm = null;
+            NuGetSearchTerm localTerm = null;
             if (feedTerm.IsEmpty())
             {
-                if (searchText != null)
-                    feedTerm.Id.Add(searchText);
+                feedTerm.Id.Add(searchText);
             }
             else
             {
                 localTerm = feedTerm.Clone();
-                if (searchText != null)
-                    localTerm.Id.Add(searchText);
+                localTerm.Id.Add(searchText);
             }
 
             return (feedTerm, localTerm);
@@ -147,7 +144,7 @@ namespace PackageManager.Services
         /// Tries to apply special conditions for looking in local folder feed.
         /// </summary>
         /// <returns><c>true</c> if search reached the end of the feed; <c>false</c> otherwise.</returns>
-        private Task<bool> ApplyLocalResourceSearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm? feedTerm, NuGetSearchTerm? localTerm, SearchOptions options, CancellationToken cancellationToken)
+        private Task<bool> ApplyLocalResourceSearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm, SearchOptions options, CancellationToken cancellationToken)
         {
             if (search is LocalPackageSearchResource)
             {
@@ -165,13 +162,13 @@ namespace PackageManager.Services
         /// Execute search on <paramref name="search"/>.
         /// </summary>
         /// <returns><c>true</c> if search reached the end of the feed; <c>false</c> otherwise.</returns>
-        private async Task<bool> ApplySearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm? feedTerm, NuGetSearchTerm? localTerm, SearchOptions options, CancellationToken cancellationToken)
+        private async Task<bool> ApplySearchAsync(List<IPackage> result, SourceRepository repository, PackageSearchResource search, NuGetSearchTerm feedTerm, NuGetSearchTerm localTerm, SearchOptions options, CancellationToken cancellationToken)
         {
             if (localTerm != null && options.PageSize == 1)
                 options.PageSize = 10;
 
             int sourceSearchPackageCount = 0;
-            foreach (IPackageSearchMetadata package in await SearchAsync(search, feedTerm?.ToString() ?? string.Empty, options, cancellationToken))
+            foreach (IPackageSearchMetadata package in await SearchAsync(search, feedTerm.ToString(), options, cancellationToken))
             {
                 sourceSearchPackageCount++;
 
@@ -229,14 +226,14 @@ namespace PackageManager.Services
             }
         }
 
-        public async Task<IPackage?> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, bool isPrereleaseIncluded, CancellationToken cancellationToken = default)
+        public async Task<IPackage> FindLatestVersionAsync(IEnumerable<IPackageSource> packageSources, IPackage package, bool isPrereleaseIncluded, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(package, "package");
 
             log.Debug($"Finding latest version of '{package.Id}'.");
 
             IEnumerable<IPackage> packages = await SearchAsync(packageSources, package.Id, new SearchOptions() { PageSize = 1, IsPrereleaseIncluded = isPrereleaseIncluded }, cancellationToken);
-            IPackage? latest = packages.FirstOrDefault();
+            IPackage latest = packages.FirstOrDefault();
             if (latest != null && string.Equals(latest.Id, package.Id, StringComparison.InvariantCultureIgnoreCase))
             {
                 log.Debug($"Found version '{latest.Version}'.");

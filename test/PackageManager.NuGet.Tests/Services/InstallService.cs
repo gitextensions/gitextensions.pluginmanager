@@ -1,9 +1,14 @@
-﻿using Neptuo.Logging;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neptuo.Logging;
+using NuGet.Configuration;
 using NuGet.Frameworks;
 using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
@@ -21,6 +26,7 @@ namespace PackageManager.Services
         {
             var frameworks = new List<NuGetFramework>() { NuGetFramework.AnyFramework };
 
+            var frameworkFilter = new NuGetFrameworkFilter(frameworks);
             var packageFilter = new DependencyNuGetPackageFilter(
                 new DefaultLog(),
                 new List<Args.Dependency>()
@@ -37,9 +43,11 @@ namespace PackageManager.Services
                 new NuGetPackageVersionService(
                     new NuGetPackageContentService(new DefaultLog()),
                     new DefaultLog(),
-                    packageFilter
+                    packageFilter,
+                    frameworkFilter
                 ),
-                packageFilter
+                packageFilter,
+                frameworkFilter
             );
 
             return install;

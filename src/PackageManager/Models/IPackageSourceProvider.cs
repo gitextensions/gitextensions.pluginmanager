@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
@@ -13,7 +16,7 @@ namespace PackageManager.Models
         /// Gets a primary source.
         /// Can returns <c>null</c> - if it does, <see cref="All"/> should be used.
         /// </summary>
-        IPackageSource? Primary { get; }
+        IPackageSource Primary { get; }
 
         /// <summary>
         /// Gets a collection of all defined sources.

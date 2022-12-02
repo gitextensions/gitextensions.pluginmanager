@@ -5,6 +5,8 @@ using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
@@ -13,7 +15,7 @@ namespace PackageManager.ViewModels
         public const string AllFeedName = "All Feeds";
 
         private readonly IPackageSourceCollection service;
-        private IEnumerable<IPackageSource>? selectedSources;
+        private IEnumerable<IPackageSource> selectedSources;
 
         IEnumerable<IPackageSource> IPackageSourceSelector.Sources
         {
@@ -33,8 +35,8 @@ namespace PackageManager.ViewModels
 
         public ObservableCollection<string> SourceNames { get; }
 
-        private string? selectedName;
-        public string? SelectedName
+        private string selectedName;
+        public string SelectedName
         {
             get { return selectedName; }
             set
@@ -73,7 +75,7 @@ namespace PackageManager.ViewModels
             {
                 isServiceUpdating = true;
 
-                string? selectedName = SelectedName;
+                string selectedName = SelectedName;
                 SourceNames.Clear();
 
                 bool isSelectedNameContained = false;

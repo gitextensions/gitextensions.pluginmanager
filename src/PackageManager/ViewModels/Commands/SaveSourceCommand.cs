@@ -3,8 +3,11 @@ using Neptuo.Observables.Collections;
 using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
@@ -13,10 +16,10 @@ namespace PackageManager.ViewModels.Commands
         private readonly ObservableCollection<IPackageSource> sources;
         private readonly IPackageSourceCollection service;
 
-        private IPackageSource? edit;
+        private IPackageSource edit;
 
-        private string? name;
-        public string? Name
+        private string name;
+        public string Name
         {
             get { return name; }
             set
@@ -30,8 +33,8 @@ namespace PackageManager.ViewModels.Commands
             }
         }
 
-        private string? url;
-        public string? Url
+        private string url;
+        public string Url
         {
             get { return url; }
             set
@@ -45,8 +48,8 @@ namespace PackageManager.ViewModels.Commands
             }
         }
 
-        public event Action? Executed;
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event Action Executed;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public SaveSourceCommand(ObservableCollection<IPackageSource> sources, IPackageSourceCollection service)
         {
@@ -77,9 +80,6 @@ namespace PackageManager.ViewModels.Commands
         {
             if (CanExecute() && Uri.TryCreate(Url, UriKind.RelativeOrAbsolute, out var uri))
             {
-                if (Name == null)
-                    Name = Url;
-
                 if (edit == null)
                 {
                     sources.Add(service.Add().Name(Name).Uri(uri).Save());

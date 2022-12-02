@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace PackageManager.Models
         private readonly ILogger nuGetLog;
         private readonly IFrameworkFilter filter;
 
-        public NuGetPackageContent(PackageReaderBase reader, ILog log, IFrameworkFilter? filter = null)
+        public NuGetPackageContent(PackageReaderBase reader, ILog log, IFrameworkFilter filter = null)
         {
             Ensure.NotNull(reader, "reader");
             Ensure.NotNull(log, "log");
@@ -33,7 +34,7 @@ namespace PackageManager.Models
             this.filter = filter;
         }
 
-        private async Task<(string? frameworkFolderName, IEnumerable<string> packagePaths)> EnumerateFiles(CancellationToken cancellationToken)
+        private async Task<(string frameworkFolderName, IEnumerable<string> packagePaths)> EnumerateFiles(CancellationToken cancellationToken)
         {
             foreach (FrameworkSpecificGroup group in await reader.GetLibItemsAsync(cancellationToken))
             {
@@ -44,7 +45,7 @@ namespace PackageManager.Models
             return (null, Enumerable.Empty<string>());
         }
 
-        private string MapPackageFilePath(string rootPath, string? frameworkFolderName, string packagePath)
+        private string MapPackageFilePath(string rootPath, string frameworkFolderName, string packagePath)
         {
             // TODO: Not sure if 100% reliable.
 

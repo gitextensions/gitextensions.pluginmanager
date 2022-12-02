@@ -1,5 +1,10 @@
 ﻿using Neptuo;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
@@ -19,7 +24,7 @@ namespace PackageManager.Models
                 Version = Version.Substring(0, indexOfPlus);
         }
 
-        public bool Equals(IPackageIdentity? other)
+        public bool Equals(IPackageIdentity other)
         {
             if (other == null)
                 return false;

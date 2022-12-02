@@ -1,8 +1,11 @@
 ﻿using Neptuo;
+using Neptuo.Activators;
 using NuGet.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using INuGetPackageSourceProvider = NuGet.Configuration.IPackageSourceProvider;
 
 namespace PackageManager.Models
@@ -12,9 +15,9 @@ namespace PackageManager.Models
         internal INuGetPackageSourceProvider Provider { get; }
         internal List<NuGetPackageSource> Sources { get; }
 
-        public event Action? Changed;
+        public event Action Changed;
 
-        public IPackageSource? Primary => Sources.FirstOrDefault(s => string.Equals(s.Name, Provider.ActivePackageSourceName, StringComparison.CurrentCultureIgnoreCase));
+        public IPackageSource Primary => Sources.FirstOrDefault(s => string.Equals(s.Name, Provider.ActivePackageSourceName, StringComparison.CurrentCultureIgnoreCase));
         public IReadOnlyCollection<IPackageSource> All => Sources;
 
         public NuGetPackageSourceCollection(INuGetPackageSourceProvider provider)
@@ -33,10 +36,10 @@ namespace PackageManager.Models
             Provider.PackageSourcesChanged -= OnProviderChanged;
         }
 
-        private void OnProviderChanged(object? sender, EventArgs e)
+        private void OnProviderChanged(object sender, EventArgs e)
             => Changed?.Invoke();
 
-        private NuGetPackageSource EnsureType(IPackageSource source, string? argumentName = null)
+        private NuGetPackageSource EnsureType(IPackageSource source, string argumentName = null)
         {
             Ensure.NotNull(source, argumentName ?? "source");
             if (source is NuGetPackageSource target)
@@ -45,7 +48,7 @@ namespace PackageManager.Models
             throw new InvalidPackageSourceImplementationException();
         }
 
-        private PackageSource UnWrap(IPackageSource source, string? argumentName = null)
+        private PackageSource UnWrap(IPackageSource source, string argumentName = null)
             => EnsureType(source, argumentName).Original;
 
         public IPackageSourceBuilder Add()
@@ -61,7 +64,7 @@ namespace PackageManager.Models
                 SavePackageSources();
         }
 
-        public void MarkAsPrimary(IPackageSource? source)
+        public void MarkAsPrimary(IPackageSource source)
         {
             if (string.Equals(Provider.ActivePackageSourceName, source?.Name, StringComparison.CurrentCultureIgnoreCase))
                 return;

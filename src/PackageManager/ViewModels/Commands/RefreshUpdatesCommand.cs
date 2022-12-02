@@ -4,6 +4,8 @@ using PackageManager.Models;
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +20,7 @@ namespace PackageManager.ViewModels.Commands
         private readonly SelfPackageConfiguration selfPackageConfiguration;
         private readonly IComparer<IPackageIdentity> packageVersionComparer;
 
-        public event Action? Completed;
+        public event Action Completed;
 
         public RefreshUpdatesCommand(UpdatesViewModel viewModel, IPackageSourceSelector packageSource, IInstallService installService, ISearchService searchService, SelfPackageConfiguration selfPackageConfiguration, IComparer<IPackageIdentity> packageVersionComparer)
         {
@@ -45,7 +47,8 @@ namespace PackageManager.ViewModels.Commands
 
             foreach (IInstalledPackage current in await installService.GetInstalledAsync(packageSource.Sources, cancellationToken))
             {
-                IPackage? latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, viewModel.IsPrereleaseIncluded, cancellationToken);
+                IPackage latest = await searchService.FindLatestVersionAsync(packageSource.Sources, current.Definition, viewModel.IsPrereleaseIncluded, cancellationToken);
+
                 if (latest != null && packageVersionComparer.Compare(latest, current.Definition) > 0)
                 {
                     viewModel.Packages.Add(new PackageUpdateViewModel(

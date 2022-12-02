@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager
 {
@@ -54,9 +56,9 @@ namespace PackageManager
 
             Assert.AreEqual(selfPackageId, args.SelfPackageId);
 
-            Assert.AreEqual(2, args.ProcessNamesToKillBeforeChange?.Count);
-            Assert.AreEqual(processToKill1, args.ProcessNamesToKillBeforeChange?.First());
-            Assert.AreEqual(processToKill2, args.ProcessNamesToKillBeforeChange?.Last());
+            Assert.AreEqual(2, args.ProcessNamesToKillBeforeChange.Count);
+            Assert.AreEqual(processToKill1, args.ProcessNamesToKillBeforeChange.First());
+            Assert.AreEqual(processToKill2, args.ProcessNamesToKillBeforeChange.Last());
 
             Assert.AreEqual(selfOriginalPath, args.SelfOriginalPath);
             Assert.AreEqual(isSelfUpdate, args.IsSelfUpdate);

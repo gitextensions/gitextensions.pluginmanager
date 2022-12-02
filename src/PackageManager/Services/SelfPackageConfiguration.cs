@@ -1,18 +1,23 @@
-﻿using PackageManager.Models;
+﻿using Neptuo;
+using PackageManager.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
-    public class SelfPackageConfiguration : IEquatable<IPackageIdentity?>
+    public class SelfPackageConfiguration : IEquatable<IPackageIdentity>
     {
-        public string? PackageId { get; }
+        public string PackageId { get; }
 
-        public SelfPackageConfiguration(string? packageId)
+        public SelfPackageConfiguration(string packageId)
         {
             PackageId = packageId;
         }
 
-        public bool Equals(IPackageIdentity? packageIdentity)
+        public bool Equals(IPackageIdentity packageIdentity)
         {
             if (packageIdentity == null)
                 return false;

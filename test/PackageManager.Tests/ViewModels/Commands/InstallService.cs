@@ -1,7 +1,11 @@
 ﻿using Moq;
 using PackageManager.Models;
 using PackageManager.Services;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
@@ -16,7 +20,7 @@ namespace PackageManager.ViewModels.Commands
         public List<IPackage> UninstallPackages { get; } = new List<IPackage>();
         public List<IPackage> IsInstalledPackages { get; } = new List<IPackage>();
 
-        public InstallService(string extractPath, Package? installPackage = null, Package? uninstallPackage = null, Package? isInstalledPackage = null)
+        public InstallService(string extractPath, Package installPackage = null, Package uninstallPackage = null, Package isInstalledPackage = null)
         {
             Mock<IInstallService> mock = new Mock<IInstallService>();
 

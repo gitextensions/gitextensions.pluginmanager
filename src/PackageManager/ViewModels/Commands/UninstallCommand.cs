@@ -3,8 +3,10 @@ using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,8 +17,8 @@ namespace PackageManager.ViewModels.Commands
         private readonly IInstallService service;
         private readonly SelfPackageConfiguration selfPackageConfiguration;
 
-        public event Func<Task<bool>>? Executing;
-        public event Action? Completed;
+        public event Func<Task<bool>> Executing;
+        public event Action Completed;
 
         public UninstallCommand(IInstallService service, SelfPackageConfiguration selfPackageConfiguration)
         {

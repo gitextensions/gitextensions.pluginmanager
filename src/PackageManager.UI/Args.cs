@@ -3,22 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager
 {
     public partial class Args : ICloneable<Args>
     {
-        public string Path { get; set; } = default!;
+        public string Path { get; set; }
         public IReadOnlyCollection<string> Monikers { get; set; }
         public IReadOnlyCollection<Dependency> Dependencies { get; set; }
-        public string? SelfPackageId { get; set; }
+        public string SelfPackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
-        public string SelfOriginalPath { get; set; } = default!;
-        public string SelfUpdateVersion { get; set; } = default!;
-        public string? Tags { get; set; }
+        public string SelfOriginalPath { get; set; }
+        public string SelfUpdateVersion { get; set; }
+        public string Tags { get; set; }
 
-        public IReadOnlyCollection<string>? ProcessNamesToKillBeforeChange { get; set; }
+        public IReadOnlyCollection<string> ProcessNamesToKillBeforeChange { get; set; }
 
         public Args()
         {
@@ -173,22 +174,22 @@ namespace PackageManager
         public class Dependency
         {
             public string Id { get; }
-            public string? Version { get; }
+            public string Version { get; }
 
             public Dependency(string id)
             {
                 Id = id;
             }
 
-            public Dependency(string id, string? version)
+            public Dependency(string id, string version)
             {
                 Id = id;
                 Version = version;
             }
 
-            public override bool Equals(object? obj)
+            public override bool Equals(object obj)
             {
-                Dependency? other = obj as Dependency;
+                Dependency other = obj as Dependency;
                 if (other == null)
                     return false;
 

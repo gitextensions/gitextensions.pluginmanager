@@ -5,6 +5,7 @@ using PackageManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,9 +17,9 @@ namespace PackageManager.ViewModels.Commands
         private readonly IPackageSourceSelector packageSource;
         private readonly ISearchService search;
 
-        private string? lastSearchText;
+        private string lastSearchText;
 
-        public event Action? Completed;
+        public event Action Completed;
 
         public SearchCommand(BrowserViewModel viewModel, IPackageSourceSelector packageSource, ISearchService search)
         {

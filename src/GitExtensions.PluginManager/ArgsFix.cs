@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PackageManager.Views
+namespace Neptuo
 {
-    public interface IAutoFocus
+    public interface ICloneable<T>
     {
-        void Focus();
+        T Clone();
     }
 }

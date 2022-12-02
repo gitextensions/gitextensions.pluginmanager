@@ -4,6 +4,9 @@ using PackageManager.Services;
 using PackageManager.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels
 {
@@ -56,7 +59,7 @@ namespace PackageManager.ViewModels
             Updates.Update.Completed += OnInstalledChanged;
         }
 
-        private void OnCancelCanExecuteChanged(object? sender, EventArgs e)
+        private void OnCancelCanExecuteChanged(object sender, EventArgs e)
             => IsLoading = Cancel.CanExecute();
 
         private void OnInstalledChanged()

@@ -1,24 +1,27 @@
 ﻿using Neptuo;
 using PackageManager.Services;
+using PackageManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager
 {
     public partial class Args : SelfUpdateService.IArgs, ICloneable<Args>, ICloneable<SelfUpdateService.IArgs>
     {
-        public string? Path { get; set; }
-        public string? SelfPackageId { get; set; }
+        public string Path { get; set; }
+        public string SelfPackageId { get; set; }
 
         public bool IsUpdateCount { get; set; }
 
         public bool IsUpdatePackage { get; set; }
-        public string? PackageId { get; set; }
+        public string PackageId { get; set; }
 
         public bool IsSelfUpdate { get; set; }
-        public string? SelfOriginalPath { get; set; }
-        public string? SelfUpdateVersion { get; set; }
+        public string SelfOriginalPath { get; set; }
+        public string SelfUpdateVersion { get; set; }
 
         private Args()
         {

@@ -2,6 +2,10 @@
 using Neptuo.Activators;
 using PackageManager.Views;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace PackageManager.Services
@@ -12,8 +16,8 @@ namespace PackageManager.Services
         private readonly IFactory<PackageSourceWindow> packageSourceFactory;
         private readonly IFactory<LogWindow> logFactory;
 
-        private PackageSourceWindow? packageSource;
-        private LogWindow? log;
+        private PackageSourceWindow packageSource;
+        private LogWindow log;
 
         public Navigator(App application, IFactory<PackageSourceWindow> packageSourceFactory, IFactory<LogWindow> logFactory)
         {
@@ -78,11 +82,9 @@ namespace PackageManager.Services
             }
         }
 
-        private void OnPackageSourceClosed(object? sender, EventArgs e)
+        private void OnPackageSourceClosed(object sender, EventArgs e)
         {
-            if (packageSource != null)
-                packageSource.Closed -= OnPackageSourceClosed;
-
+            packageSource.Closed -= OnPackageSourceClosed;
             packageSource = null;
         }
 
@@ -101,11 +103,9 @@ namespace PackageManager.Services
             }
         }
 
-        private void OnLogClosed(object? sender, EventArgs e)
+        private void OnLogClosed(object sender, EventArgs e)
         {
-            if (log != null)
-                log.Closed -= OnLogClosed;
-
+            log.Closed -= OnLogClosed;
             log = null;
         }
     }

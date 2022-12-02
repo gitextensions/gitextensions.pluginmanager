@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
@@ -12,7 +16,7 @@ namespace PackageManager.Models
         /// <summary>
         /// Gets a real file path where removal problem occured.
         /// </summary>
-        public string? FilePath { get; }
+        public string FilePath { get; }
 
         /// <summary>
         /// Creates a new instance where <paramref name="filePath"/> caused the problem and <paramref name="inner"/> exception.

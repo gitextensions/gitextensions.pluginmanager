@@ -1,7 +1,11 @@
 ﻿using Moq;
 using PackageManager.Models;
 using PackageManager.Services;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {
@@ -14,7 +18,7 @@ namespace PackageManager.ViewModels.Commands
 
         public List<IPackage> UpdatePackages { get; } = new List<IPackage>();
 
-        public SelfUpdateService(bool isSelfUpdate, Package? updatePackage)
+        public SelfUpdateService(bool isSelfUpdate, Package updatePackage)
         {
             Mock<ISelfUpdateService> mock = new Mock<ISelfUpdateService>();
 

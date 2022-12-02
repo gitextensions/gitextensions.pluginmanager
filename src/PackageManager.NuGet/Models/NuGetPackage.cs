@@ -1,8 +1,15 @@
 ﻿using Neptuo;
+using Neptuo.Logging;
+using NuGet.Common;
+using NuGet.Packaging;
 using NuGet.Protocol.Core.Types;
+using PackageManager.Logging;
 using PackageManager.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +33,7 @@ namespace PackageManager.Models
         public Uri LicenseUrl => source.LicenseUrl;
 
         public NuGetPackage(IPackageSearchMetadata source, SourceRepository repository, NuGetPackageContentService contentService, NuGetPackageVersionService versionService)
-            : base(source.Identity)
+            : base(source?.Identity)
         {
             Ensure.NotNull(source, "source");
             Ensure.NotNull(repository, "repository");
@@ -44,10 +51,10 @@ namespace PackageManager.Models
         public async Task<IEnumerable<IPackage>> GetVersionsAsync(bool isPrereleaseIncluded, CancellationToken cancellationToken)
             => await versionService.GetListAsync(int.MaxValue, source, repository, isPrereleaseIncluded: isPrereleaseIncluded, cancellationToken: cancellationToken);
 
-        public bool Equals(IPackage? other)
-            => Equals(other as IPackageIdentity);
+        public bool Equals(IPackage other)
+            => Equals((IPackageIdentity)other);
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is IPackage other)
                 return Equals(other);
