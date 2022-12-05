@@ -7,7 +7,7 @@
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
-    <NoWarn>1701;1702;NU5100</NoWarn>
+    <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
