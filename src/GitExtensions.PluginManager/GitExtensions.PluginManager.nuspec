@@ -9,7 +9,7 @@
     <tags>$tags$</tags>
     <license type="file">LICENSE.md</license>
     <dependencies>
-      <dependency id="GitExtensions.Extensibility" version="[0.1.0, 1.0.0)" />
+      <dependency id="GitExtensions.Extensibility" version="[0.3.0, 1.0.0)" />
     </dependencies>
   </metadata>
   <files>
