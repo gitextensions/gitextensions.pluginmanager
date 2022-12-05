@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="Neptuo" />
-    <PackageReference Update="NuGet.PackageManagement" />
+    <PackageReference Include="Neptuo" />
+    <PackageReference Include="NuGet.PackageManagement" />
   </ItemGroup>
 
   <ItemGroup>

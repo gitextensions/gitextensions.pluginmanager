@@ -17,9 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="GitExtensions.Extensibility" />
-    <PackageReference Update="System.ComponentModel.Composition" />
-    <PackageReference Update="System.Resources.Extensions" />
+    <PackageReference Include="Neptuo" />
+    <PackageReference Include="GitExtensions.Extensibility" />
+    <PackageReference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PackageManager.UI\PackageManager.UI.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>

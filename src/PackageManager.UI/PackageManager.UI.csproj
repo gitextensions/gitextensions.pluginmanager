@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Neptuo.Exceptions" />
-    <PackageReference Update="Neptuo.Observables" />
+    <PackageReference Include="Neptuo.Exceptions" />
+    <PackageReference Include="Neptuo.Observables" />
   </ItemGroup>
 
   <ItemGroup>
