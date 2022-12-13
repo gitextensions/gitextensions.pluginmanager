@@ -1,26 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Description>NuGet-based Plugin Manager for Git Extensions</Description>
     <PackageTags>GitExtensions</PackageTags>
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
-    <NoWarn>1701;1702;NU5100</NoWarn>
+    <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <PackageManagerSourcePath>..\PackageManager.UI\bin\Release\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitExtensions.Extensibility" Version="0.2.*" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="GitExtensions.Extensibility" />
+    <PackageReference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +41,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PackageManager.UI\PackageManager.UI.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -59,6 +58,7 @@
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(TargetDir)$(PackageManagerTargetPath)" />
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(PackageManagerTargetPath)" />
   </Target>
+
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
     <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />

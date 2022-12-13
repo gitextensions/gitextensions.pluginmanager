@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\..\src\PackageManager.UI\Args.cs" Link="Services\Args.cs" />
     <Compile Include="..\..\src\PackageManager.UI\Models\NuGetFrameworkFilter.cs" Link="Services\NuGetFrameworkFilter.cs" />

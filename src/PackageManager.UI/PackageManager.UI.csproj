@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <RootNamespace>PackageManager</RootNamespace>
     <AssemblyName>PackageManager.UI</AssemblyName>
     <ApplicationIcon>Views\Assets\box-search-result.ico</ApplicationIcon>
     <StartupObject>PackageManager.Program</StartupObject>
+  
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo.Exceptions" Version="1.2.1" />
-    <PackageReference Include="Neptuo.Observables" Version="2.0.0" />
+    <PackageReference Include="Neptuo.Exceptions" />
+    <PackageReference Include="Neptuo.Observables" />
   </ItemGroup>
 
   <ItemGroup>

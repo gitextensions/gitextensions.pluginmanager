@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.0" />
-    <PackageReference Include="NuGet.PackageManagement" Version="5.11.0" />
+    <PackageReference Include="Neptuo" />
+    <PackageReference Include="NuGet.PackageManagement" />
   </ItemGroup>
 
   <ItemGroup>

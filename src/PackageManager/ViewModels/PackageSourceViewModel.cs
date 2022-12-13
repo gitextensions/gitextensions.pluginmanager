@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MoveCommand = PackageManager.ViewModels.Commands.MoveCommand<PackageManager.Models.IPackageSource>;
 
 namespace PackageManager.ViewModels
 {
@@ -21,8 +22,8 @@ namespace PackageManager.ViewModels
         public DelegateCommand<IPackageSource> Edit { get; }
         public RemoveSourceCommand Remove { get; }
 
-        public MoveCommand<IPackageSource> MoveUp { get; }
-        public MoveCommand<IPackageSource> MoveDown { get; }
+        public MoveCommand MoveUp { get; }
+        public MoveCommand MoveDown { get; }
 
         public SaveSourceCommand Save { get; }
         public Command Cancel { get; }
@@ -52,8 +53,8 @@ namespace PackageManager.ViewModels
             Edit = new DelegateCommand<IPackageSource>(OnEdit, CanEdit);
             Remove = new RemoveSourceCommand(Sources, service);
 
-            MoveUp = new MoveCommand<IPackageSource>(Sources, source => service.MoveUp(source), source => Sources.IndexOf(source) > 0);
-            MoveDown = new MoveCommand<IPackageSource>(Sources, source => service.MoveDown(source), source => Sources.IndexOf(source) < Sources.Count - 1);
+            MoveUp = new MoveCommand(Sources, source => service.MoveUp(source), source => Sources.IndexOf(source) > 0);
+            MoveDown = new MoveCommand(Sources, source => service.MoveDown(source), source => Sources.IndexOf(source) < Sources.Count - 1);
 
             Save = new SaveSourceCommand(Sources, service);
             Save.Executed += () => IsEditActive = false;

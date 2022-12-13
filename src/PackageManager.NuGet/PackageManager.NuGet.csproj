@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>PackageManager</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neptuo" Version="6.0.0" />
-    <PackageReference Include="NuGet.PackageManagement" Version="5.11.0" />
+    <PackageReference Include="Neptuo" />
+    <PackageReference Include="NuGet.PackageManagement" />
   </ItemGroup>
 
   <ItemGroup>

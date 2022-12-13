@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Neptuo;
@@ -24,13 +23,15 @@ namespace PackageManager.Services
             this.processes = processes;
         }
 
-        public string CurrentFileName => Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+        public string CurrentFileName => Path.GetFileName(GetCurrentApplicationPath());
+
+        private static string GetCurrentApplicationPath() => Process.GetCurrentProcess().MainModule!.FileName!;
 
         public bool IsSelfUpdate => application.Args.IsSelfUpdate;
 
         public void Update(IPackage latest)
         {
-            string current = Assembly.GetExecutingAssembly().Location;
+            string current = GetCurrentApplicationPath();
             string temp = CopySelfToTemp(current);
             IArgs arguments = CreateArguments(current, latest);
             RerunFromTemp(temp, arguments);
