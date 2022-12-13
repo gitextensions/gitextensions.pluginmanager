@@ -1,0 +1,17 @@
+<Project>
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory)\.., Directory.Build.props))\Directory.Build.props" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>PackageManager</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup> 
+    <PackageReference Include="Microsoft.NET.Test.Sdk" IsImplicitlyDefined="true" />
+    <PackageReference Include="Moq" IsImplicitlyDefined="true" />
+    <PackageReference Include="MSTest.TestAdapter" IsImplicitlyDefined="true" />
+    <PackageReference Include="MSTest.TestFramework" IsImplicitlyDefined="true" />
+    <PackageReference Include="Appveyor.TestLogger" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+</Project>

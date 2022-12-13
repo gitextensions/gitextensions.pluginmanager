@@ -12,8 +12,8 @@
 
   <PropertyGroup>
     <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <PackageManagerSourcePath>..\PackageManager.UI\bin\Release\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,6 +58,7 @@
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(TargetDir)$(PackageManagerTargetPath)" />
     <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(PackageManagerTargetPath)" />
   </Target>
+
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
     <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />

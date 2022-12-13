@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 2.0.0.{build}
+version: 3.0.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
