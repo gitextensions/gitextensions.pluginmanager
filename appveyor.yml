@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 3.0.0.{build}
+version: 1.1.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
@@ -44,14 +44,31 @@ build_script:
 test_script:
 - ps: .\tools\Run-Tests.ps1
 
+after_test:
+- ps: |
+    # do not sign artifacts for PR to release branches, publish dev builds instead
+    if ($env:APPVEYOR_PULL_REQUEST_TITLE) {
+        Write-Host "[INFO]: Do not sign artifacts from PR to release branch"
+        Get-ChildItem GitExtensions.PluginManager*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Get-ChildItem GitExtensions.PluginManager*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Exit-AppVeyorBuild
+        return
+    }
+    else {
+        Write-Host "[INFO]: Prepare combined artifact for signing on release branch"
+        Write-Host "Creating combined build artifact ..."
+        $nupkg = (Resolve-Path .\GitExtensions.PluginManager*.nupkg)[0].Path;
+        $zip = (Resolve-Path .\GitExtensions.PluginManager*.zip)[0].Path;
+        $combined = ".\GitExtensions.PluginManager.$($env:APPVEYOR_BUILD_VERSION)$($env:version_suffix).combined-unsigned.zip"
+        Compress-Archive -LiteralPath $nupkg, $zip -CompressionLevel NoCompression -DestinationPath $combined -Force
+    }
+
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 
 artifacts:
-- path: .\GitExtensions.PluginManager.*.zip
-- path: .\GitExtensions.PluginManager.*.nupkg
-- path: .\*.binlog
+- path: .\GitExtensions.PluginManager.*.combined-unsigned.zip
 
 #---------------------------------#
 #     deployment configuration    #
@@ -61,7 +78,7 @@ deploy:
 - provider: Webhook
   on:
     ARTIFACT_SIGNING_ENABLED: true
-  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?SigningPolicyId=8a4ce84a-78d1-4fc0-8c0c-7cd51fb108c0
+  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?SigningPolicyId=cae0b405-4eda-43db-b19e-7e47faa929e0
   on_build_success: true
   on_build_failure: false
   on_build_status_changed: false
