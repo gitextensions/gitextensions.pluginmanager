@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 1.1.0.{build}
+version: 2.0.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
@@ -78,10 +78,10 @@ deploy:
 - provider: Webhook
   on:
     ARTIFACT_SIGNING_ENABLED: true
-  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?SigningPolicyId=cae0b405-4eda-43db-b19e-7e47faa929e0
+  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?ProjectKey=gitextensions.pluginmanager&SigningPolicyKey=release-signing
   on_build_success: true
   on_build_failure: false
   on_build_status_changed: false
   method: POST
   authorization:
-     secure: RdmJQ3LAsGIbtqbxlcn7wF8ESTbPSDiR0Fmyt11mDl+avSDd0HKexHA+sWQA3cN1K8aVnKTzvjGTQS8DSDmLzQ==
+     secure: IlLI/MbhdzmXF/WB2G84zYsDWePXJqHBWDb1zBPxxXvGgx0WRxzMZxuBsvCOcZvbPTRF+UcGp0d5/HT8xZUEjA==
