@@ -1,17 +1,14 @@
-﻿using GitExtensions.PluginManager.Properties;
-using GitUIPluginInterfaces;
-using PackageManager;
-using ResourceManager;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using GitExtensions.PluginManager.Properties;
+using GitUIPluginInterfaces;
+using PackageManager;
+using ResourceManager;
 
 namespace GitExtensions.PluginManager
 {

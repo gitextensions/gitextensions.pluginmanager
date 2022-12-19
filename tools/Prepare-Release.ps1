@@ -21,7 +21,7 @@ function EnsureLastCommandSucceeded()
 }
 
 Write-Host "Restore solution"
-dotnet restore ..\GitExtensions.PluginManager.sln -p:RuntimeIdentifier=win-x86
+dotnet restore ..\GitExtensions.PluginManager.sln -p:RuntimeIdentifier=win-x64
 EnsureLastCommandSucceeded
 
 Write-Host "Publish PackageManager.UI"
