@@ -20,12 +20,18 @@ function EnsureLastCommandSucceeded()
     }
 }
 
+# Install the required .NET SDK
+Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
+./dotnet-install.ps1 -Channel LTS -InstallDir 'C:\Program Files\dotnet'
+# Remove the script so it doesn't "pollute" the build
+Remove-Item -Path .\dotnet-install.ps1
+
 Write-Host "Restore solution"
 dotnet restore ..\GitExtensions.PluginManager.sln -p:RuntimeIdentifier=win-x86
 EnsureLastCommandSucceeded
 
 Write-Host "Publish PackageManager.UI"
-dotnet publish ..\src\PackageManager.UI\PackageManager.UI.csproj -c Release -p:PublishDir=bin\Release\net6.0-windows\publish\ -bl:$targetPath\build-PackageManager.UI.binlog
+dotnet publish ..\src\PackageManager.UI\PackageManager.UI.csproj -c Release -p:PublishDir=bin\Release\net8.0-windows\publish\ -bl:$targetPath\build-PackageManager.UI.binlog
 EnsureLastCommandSucceeded
 
 Write-Host "Publish GitExtensions.PluginManager"

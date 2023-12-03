@@ -56,7 +56,7 @@ namespace PackageManager.Services
             catch (FatalProtocolException e) when (e.InnerException is TaskCanceledException)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                throw e;
+                throw;
             }
         }
 

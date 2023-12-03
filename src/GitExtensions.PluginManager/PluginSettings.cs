@@ -1,4 +1,5 @@
 ﻿using GitUIPluginInterfaces;
+using GitUIPluginInterfaces.Settings;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace GitExtensions.PluginManager
         /// </summary>
         public static BoolSetting CloseInstancesProperty { get; } = new BoolSetting("CloseInstances", "Close all instances of Git Extensions before starting Plugin Manager", false);
 
-        private readonly ISettingsSource source;
+        private readonly SettingsSource source;
 
         /// <summary>
         /// Gets current value of <see cref="CloseInstancesProperty"/>.
         /// </summary>
         public bool CloseInstances => source.GetBool(CloseInstancesProperty.Name, CloseInstancesProperty.DefaultValue);
 
-        public PluginSettings(ISettingsSource source)
+        public PluginSettings(SettingsSource source)
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
         }
