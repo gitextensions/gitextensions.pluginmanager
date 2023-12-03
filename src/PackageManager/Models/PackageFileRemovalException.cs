@@ -10,7 +10,6 @@ namespace PackageManager.Models
     /// <summary>
     /// An exception raised when there was an removing file from installed package.
     /// </summary>
-    [Serializable]
     public class PackageFileRemovalException : Exception
     {
         /// <summary>
@@ -28,14 +27,5 @@ namespace PackageManager.Models
         {
             FilePath = filePath;
         }
-
-        /// <summary>
-        /// Creates a new instance for deserialization.
-        /// </summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
-        protected PackageFileRemovalException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
     }
 }

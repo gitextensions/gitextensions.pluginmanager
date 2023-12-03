@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <Description>NuGet-based Plugin Manager for Git Extensions</Description>
     <PackageTags>GitExtensions</PackageTags>
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
