@@ -1,14 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PackageManager.ViewModels.Commands
 {

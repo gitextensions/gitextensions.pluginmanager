@@ -1,11 +1,8 @@
 ﻿using Neptuo;
-using Neptuo.Activators;
 using NuGet.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using INuGetPackageSourceProvider = NuGet.Configuration.IPackageSourceProvider;
 
 namespace PackageManager.Models
