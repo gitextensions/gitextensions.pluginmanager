@@ -1,7 +1,9 @@
-﻿using GitExtensions.PluginManager.Properties;
+﻿using GitExtensions.Extensibility.Git;
+using GitExtensions.Extensibility.Plugins;
+using GitExtensions.Extensibility.Settings;
+using GitExtensions.PluginManager.Properties;
 using GitUIPluginInterfaces;
 using PackageManager;
-using ResourceManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

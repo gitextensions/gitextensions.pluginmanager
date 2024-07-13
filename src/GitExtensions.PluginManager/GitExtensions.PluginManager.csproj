@@ -28,14 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GitUI">
-      <HintPath>$(GitExtensionsPath)\GitUI.dll</HintPath>
+    <Reference Include="GitExtensions.Extensibility">
+      <HintPath>$(GitExtensionsPath)\GitExtensions.Extensibility.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
       <HintPath>$(GitExtensionsPath)\GitUIPluginInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ResourceManager">
-      <HintPath>$(GitExtensionsPath)\ResourceManager.dll</HintPath>
     </Reference>
   </ItemGroup>
 
