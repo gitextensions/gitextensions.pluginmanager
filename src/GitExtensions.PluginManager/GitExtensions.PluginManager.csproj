@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="GitExtensions.Extensibility" />
-    <PackageReference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="Microsoft.VisualStudio.Composition" />
     <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 

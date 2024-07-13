@@ -1,12 +1,12 @@
 <Project>
 
   <ItemGroup>
+    <PackageReference Update="Microsoft.VisualStudio.Composition" Version="17.2.41" />
     <PackageReference Update="GitExtensions.Extensibility" Version="0.3.*" />
     <PackageReference Update="Neptuo" Version="6.0.2" />
     <PackageReference Update="Neptuo.Exceptions" Version="1.2.2" />
     <PackageReference Update="Neptuo.Observables" Version="2.1.1" />
     <PackageReference Update="NuGet.PackageManagement" Version="6.8.0" />
-    <PackageReference Update="System.ComponentModel.Composition" Version="8.0.0" />
     <PackageReference Update="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 
