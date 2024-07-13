@@ -1,16 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neptuo.Logging;
 using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Versioning;
-using PackageManager.Models;
 using PackageManager.ViewModels.Commands;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
