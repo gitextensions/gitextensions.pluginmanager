@@ -74,6 +74,10 @@ namespace PackageManager.Models
                             string result = MapPackageFilePath(path, content.frameworkFolderName, targetPath);
                             log.Debug($"Extracting file '{result}'.");
 
+                            string resultDirectory = Path.GetDirectoryName(result);
+                            if (!Directory.Exists(resultDirectory))
+                                Directory.CreateDirectory(resultDirectory);
+
                             using (FileStream targetContent = new FileStream(result, FileMode.OpenOrCreate))
                                 sourceContent.CopyTo(targetContent);
 
