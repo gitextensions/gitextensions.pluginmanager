@@ -1,16 +1,15 @@
-﻿using GitExtensions.PluginManager.Properties;
+﻿using GitExtensions.Extensibility.Git;
+using GitExtensions.Extensibility.Plugins;
+using GitExtensions.Extensibility.Settings;
+using GitExtensions.PluginManager.Properties;
 using GitUIPluginInterfaces;
 using PackageManager;
-using ResourceManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GitExtensions.PluginManager
@@ -24,7 +23,7 @@ namespace GitExtensions.PluginManager
         public const string PackageId = @"GitExtensions.PluginManager";
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PackageManager\PackageManager.UI.exe";
-        public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "net6.0", "any", "netstandard2.0" };
+        public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "net6.0", "net7.0", "net8.0", "any", "netstandard2.0" };
 
         internal PluginSettings Configuration { get; private set; }
 

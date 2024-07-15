@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <Description>NuGet-based Plugin Manager for Git Extensions</Description>
     <PackageTags>GitExtensions</PackageTags>
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
@@ -18,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="GitExtensions.Extensibility" />
-    <PackageReference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="Microsoft.VisualStudio.Composition" />
     <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
@@ -27,14 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GitUI">
-      <HintPath>$(GitExtensionsPath)\GitUI.dll</HintPath>
+    <Reference Include="GitExtensions.Extensibility">
+      <HintPath>$(GitExtensionsPath)\GitExtensions.Extensibility.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
       <HintPath>$(GitExtensionsPath)\GitUIPluginInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ResourceManager">
-      <HintPath>$(GitExtensionsPath)\ResourceManager.dll</HintPath>
     </Reference>
   </ItemGroup>
 

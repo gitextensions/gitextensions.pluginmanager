@@ -3,11 +3,16 @@
 #---------------------------------#
 
 # version format
-version: 2.1.0.{build}
+version: 3.0.0.{build}
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
   version_suffix: ''
+  # Disable the .NET logo in the console output.
+  DOTNET_NOLOGO: true
+  # Disable the .NET first time experience to skip caching NuGet packages and speed up the build.
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
 
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
