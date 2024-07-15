@@ -4,6 +4,11 @@ using Neptuo.Observables.Collections;
 using Neptuo.Observables.Commands;
 using PackageManager.Models;
 using PackageManager.ViewModels.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using MoveCommand = PackageManager.ViewModels.Commands.MoveCommand<PackageManager.Models.IPackageSource>;
 
 namespace PackageManager.ViewModels

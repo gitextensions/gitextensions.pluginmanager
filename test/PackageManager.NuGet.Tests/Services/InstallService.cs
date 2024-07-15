@@ -1,9 +1,14 @@
-﻿using Neptuo.Logging;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neptuo.Logging;
+using NuGet.Configuration;
 using NuGet.Frameworks;
 using PackageManager.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PackageManager.Services
 {
