@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PackageManager.Models
+﻿namespace PackageManager.Models
 {
     /// <summary>
     /// A mutable collection of defined package sources.
