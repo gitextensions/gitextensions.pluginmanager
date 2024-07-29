@@ -1,9 +1,12 @@
-#---------------------------------#
-#      general configuration      #
-#---------------------------------#
-
 # version format
 version: 3.0.0.{build}
+
+matrix:
+  fast_finish: true
+
+# Build worker image (VM template)
+image:
+- Visual Studio 2022
 
 # version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
 environment:
@@ -13,17 +16,16 @@ environment:
   # Disable the .NET first time experience to skip caching NuGet packages and speed up the build.
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
-
 # Do not build on tags (GitHub and BitBucket)
 skip_tags: true
 
-#---------------------------------#
-#    environment configuration    #
-#---------------------------------#
-
-# Build worker image (VM template)
-image:
-- Visual Studio 2022
+# Build settings, not to be confused with "before_build" and "after_build".
+# "project" is relative to the original build directory and not influenced by directory changes in "before_build".
+build:
+  # enable MSBuild parallel builds
+  parallel: true
+  # MSBuild verbosity level
+  verbosity: minimal
 
 # enable patching of Directory.Build.props
 dotnet_csproj:
@@ -39,21 +41,62 @@ dotnet_csproj:
 #       build configuration       #
 #---------------------------------#
 
+install:
+- ps: |
+    # Install the required .NET SDK
+    Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
+    ./dotnet-install.ps1 -Channel LTS -InstallDir 'C:\Program Files\dotnet'
+    # Remove the script so it doesn't "pollute" the build
+    Remove-Item -Path .\dotnet-install.ps1
+
 build_script:
-- ps: .\tools\Prepare-Release.ps1
+- ps: |
+    dotnet restore --verbosity q --nologo /bl:.\artifacts\logs\restore.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+
+- ps: |
+    dotnet build -c Release --verbosity q --nologo /bl:.\artifacts\logs\build.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+
+- ps: |
+    dotnet publish --configuration Release --verbosity q -bl:.\artifacts\logs\publish.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 
 test_script:
-- ps: .\tools\Run-Tests.ps1
+- ps: |
+    dotnet test -c Release --no-restore --no-build --nologo --verbosity q --test-adapter-path:. --logger:Appveyor --logger:trx /bl:.\artifacts\logs\tests.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 
 artifacts:
-- path: .\GitExtensions.PluginManager.*.zip
-- path: .\GitExtensions.PluginManager.*.nupkg
-- path: .\*.binlog
+- path: .\artifacts\GitExtensions.PluginManager.*.zip
+- path: .\artifacts\GitExtensions.PluginManager.*.nupkg
+- path: .\artifacts\logs\*.binlog
+
+
+# on build failure
+on_failure:
+- ps: |
+    Get-ChildItem -recurse artifacts\Release\TestsResults\*.trx -ErrorAction SilentlyContinue `
+    | ForEach-Object {
+        Push-AppveyorArtifact "$_"
+    }
+- ps: |
+    Get-ChildItem -recurse artifacts\Release\TestsResults\*.trx | `
+        ForEach-Object {
+            $file = $_.FullName.Replace('[', '``[').Replace(']', '``]')
+            #Write-Output "Processing $file"
+
+            [xml]$xml = Get-Content -Path $file
+            $xml.TestRun.Results.UnitTestResult | Where-Object outcome -eq 'Failed' | ForEach-Object {
+                $errorMessage = "$($_.Output.ErrorInfo.Message)`r`n$($_.Output.ErrorInfo.StackTrace)`r`n"
+                Write-Host $errorMessage -ForegroundColor Red
+            }
+        }

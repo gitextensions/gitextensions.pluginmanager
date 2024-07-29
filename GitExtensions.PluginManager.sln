@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33130.490
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitExtensions.PluginManager", "src\GitExtensions.PluginManager\GitExtensions.PluginManager.csproj", "{4EB0566E-6D4F-43AF-AA97-2A15ABB66787}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1} = {3B5E3720-B3CB-4A12-B2D4-6BCB6BE78FF1}
+		{B302D166-37CE-439D-8AE1-0CCB80BAD332} = {B302D166-37CE-439D-8AE1-0CCB80BAD332}
+		{E7AD4376-D8B1-469D-A2E3-38059A5EB152} = {E7AD4376-D8B1-469D-A2E3-38059A5EB152}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackageManager.UI", "src\PackageManager.UI\PackageManager.UI.csproj", "{6F4FA02A-B061-4607-925E-27B122DE60BC}"
 EndProject

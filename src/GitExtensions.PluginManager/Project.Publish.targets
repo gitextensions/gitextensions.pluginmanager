@@ -1,0 +1,110 @@
+<Project>
+  <PropertyGroup>
+    <_PackageManagerFolder>PackageManager</_PackageManagerFolder>
+  </PropertyGroup>
+
+  <!--
+    ============================================================
+                       _CopyPackageManager
+
+    Copy PackageManager.UI into GitExtensions.PluginManager so it can get packed and
+    to Git Extensions shared installation so we can test it locally
+    ============================================================
+    -->
+  <Target Name="_CopyPackageManager">
+    <PropertyGroup>
+      <_PackageManagerSourcePath>$([MSBuild]::NormalizePath('$(RepoRoot)', 'src', 'PackageManager.UI', 'bin', '$(Configuration)', '$(TargetFramework)', '$(PackageManagerUIRuntimeIdentifier)', 'publish', 'PackageManager.UI.exe'))</_PackageManagerSourcePath>
+      <_PackageManagerTargetPath>$(_PackageManagerFolder)\PackageManager.UI.exe</_PackageManagerTargetPath>
+    </PropertyGroup>
+
+    <!-- Copying to we can pack it -->
+    <Copy SourceFiles="$(_PackageManagerSourcePath)"
+          DestinationFiles="$(TargetDir)$(_PackageManagerTargetPath)" />
+
+    <!-- Copying to Git Extensions shared installation so we can test it locally -->
+    <Copy SourceFiles="$(_PackageManagerSourcePath)"
+          DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(_PackageManagerTargetPath)" />
+  </Target>
+
+  <!--
+    ============================================================
+                       _SetPackageProperties
+
+    Update nuspec properties.
+    ============================================================
+    -->
+  <Target Name="_SetPackageProperties" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        version=$(PackageVersion);
+        configuration=$(Configuration);
+        tags=$(PackageTags.Replace(';',' '));
+        projectUrl=$(PackageProjectUrl);
+        iconUrl=$(PackageIconUrl);
+        repositoryUrl=$(RepositoryUrl);
+        repositoryType=$(RepositoryType);
+        repositoryCommit=$(RepositoryCommit);
+        author=$(Authors);
+        copyright=$(Copyright);
+        description=$(Description);
+        targetDir=$(TargetDir);
+      </NuspecProperties>
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    ============================================================
+                       _OverrideGetAbsoluteOutputPathsForPack
+
+    Override PackageOutputAbsolutePath to output the nupkg in artifacts folder instead of bin.
+    ============================================================
+    -->
+  <Target Name="_OverrideGetAbsoluteOutputPathsForPack" AfterTargets="_GetAbsoluteOutputPathsForPack">
+    <PropertyGroup>
+      <!-- Set the nupkg output path, used by GenerateNuspec targets, PackTask task -->
+      <PackageOutputAbsolutePath>$([MSBuild]::NormalizePath('$(ArtifactsDir)', '..'))</PackageOutputAbsolutePath>
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    ============================================================
+                       CreatePortable
+
+    Creates a portable archive.
+    ============================================================
+    -->
+    <Target Name="CreatePortable"
+          AfterTargets="Publish"
+          DependsOnTargets="_CopyPackageManager;Pack">
+    <PropertyGroup>
+      <_PublishPortableFileName>GitExtensions.PluginManager.$(PackageVersion).zip</_PublishPortableFileName>
+      <_PublishPortablePath>$([MSBuild]::NormalizePath('$(ArtifactsDir)', '..', '$(_PublishPortableFileName)'))</_PublishPortablePath>
+
+      <!-- We want to archive the whole publish folder, so get one level up -->
+      <_PublishedPath>$([MSBuild]::NormalizeDirectory('$(PublishDir)'))</_PublishedPath>
+    </PropertyGroup>
+    <!-- 1. Copy GitExtensions.PluginManager.dll and PackageManager\PackageManager.UI.exe files -->
+    <Copy
+          SourceFiles="$(TargetPath)"
+          DestinationFolder="$(ArtifactsTmpDir)"
+          ContinueOnError="ErrorAndStop"
+          />
+    <ItemGroup>
+      <_ZipContent Include="$([MSBuild]::NormalizePath('$(TargetDir)', '$(_PackageManagerFolder)'))\*.*" />
+    </ItemGroup>
+    <Copy
+          SourceFiles="@(_ZipContent)"
+          DestinationFolder="$(ArtifactsTmpDir)$(_PackageManagerFolder)\%(RecursiveDir)"
+          ContinueOnError="ErrorAndStop"
+          />
+
+    <!-- 2. Create a portable archive -->
+    <ZipDirectory
+          SourceDirectory="$(ArtifactsTmpDir)"
+          DestinationFile="$(_PublishPortablePath)"
+          Overwrite="true"
+          ContinueOnError="ErrorAndStop"
+          />
+  </Target>
+</Project>

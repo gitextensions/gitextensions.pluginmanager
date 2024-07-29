@@ -10,7 +10,7 @@
   
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <RuntimeIdentifier>$(PackageManagerUIRuntimeIdentifier)</RuntimeIdentifier>
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
