@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildProjectDirectory)\Project.Publish.targets" />
 
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
@@ -9,12 +10,7 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,7 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PackageManager.UI\PackageManager.UI.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\PackageManager.UI\PackageManager.UI.csproj"
+      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,38 +48,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <Target Name="CopyPackageManager" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(TargetDir)$(PackageManagerTargetPath)" />
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(PackageManagerTargetPath)" />
-  </Target>
 
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
     <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />
   </Target>
 
-  <Target Name="SetPackageProperties" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <NuspecProperties>
-        id=$(PackageId);
-        version=$(PackageVersion);
-        configuration=$(Configuration);
-        tags=$(PackageTags.Replace(';',' '));
-        projectUrl=$(PackageProjectUrl);
-        iconUrl=$(PackageIconUrl);
-        repositoryUrl=$(RepositoryUrl);
-        repositoryType=$(RepositoryType);
-        repositoryCommit=$(RepositoryCommit);
-        author=$(Authors);
-        copyright=$(Copyright);
-        description=$(Description);
-        targetDir=$(TargetDir);
-      </NuspecProperties>
-    </PropertyGroup>
-  </Target>
-  
-  <Target Name="Zip" AfterTargets="Pack">
-    <Exec Command="powershell -ExecutionPolicy Unrestricted $(MSBuildProjectDirectory)\..\..\tools\Zip-GitExtensionsPlugin.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
-  </Target>
 </Project>
