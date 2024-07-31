@@ -1,24 +1,31 @@
-#---------------------------------#
-#      general configuration      #
-#---------------------------------#
-
 # version format
-version: 2.0.1.{build}
+version: 3.0.0.{build}
 
-# version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
-environment:
-  version_suffix: ''
-
-# Do not build on tags (GitHub and BitBucket)
-skip_tags: true
-
-#---------------------------------#
-#    environment configuration    #
-#---------------------------------#
+matrix:
+  fast_finish: true
 
 # Build worker image (VM template)
 image:
 - Visual Studio 2022
+
+# version suffix, if any (e.g. '-RC1', '-beta' otherwise '')
+environment:
+  version_suffix: ''
+  # Disable the .NET logo in the console output.
+  DOTNET_NOLOGO: true
+  # Disable the .NET first time experience to skip caching NuGet packages and speed up the build.
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: true
+
+# Build settings, not to be confused with "before_build" and "after_build".
+# "project" is relative to the original build directory and not influenced by directory changes in "before_build".
+build:
+  # enable MSBuild parallel builds
+  parallel: true
+  # MSBuild verbosity level
+  verbosity: minimal
 
 # enable patching of Directory.Build.props
 dotnet_csproj:
@@ -34,31 +41,51 @@ dotnet_csproj:
 #       build configuration       #
 #---------------------------------#
 
+install:
+- ps: |
+    # Install the required .NET SDK
+    Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
+    ./dotnet-install.ps1 -Channel LTS -InstallDir 'C:\Program Files\dotnet'
+    # Remove the script so it doesn't "pollute" the build
+    Remove-Item -Path .\dotnet-install.ps1
+
 build_script:
-- ps: .\tools\Prepare-Release.ps1
+- ps: |
+    dotnet restore --verbosity q --nologo /bl:.\artifacts\logs\restore.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+
+- ps: |
+    dotnet build -c Release --verbosity q --nologo /bl:.\artifacts\logs\build.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+
+- ps: |
+    dotnet publish --configuration Release --verbosity q -bl:.\artifacts\logs\publish.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
 #---------------------------------#
 #       tests configuration       #
 #---------------------------------#
 
 test_script:
-- ps: .\tools\Run-Tests.ps1
+- ps: |
+    dotnet test -c Release --no-restore --no-build --nologo --verbosity q --test-adapter-path:. --logger:Appveyor --logger:trx /bl:.\artifacts\logs\tests.binlog
+    if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
 after_test:
 - ps: |
     # do not sign artifacts for PR to release branches, publish dev builds instead
     if ($env:APPVEYOR_PULL_REQUEST_TITLE) {
         Write-Host "[INFO]: Do not sign artifacts from PR to release branch"
-        Get-ChildItem GitExtensions.PluginManager*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
-        Get-ChildItem GitExtensions.PluginManager*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Get-ChildItem .\artifacts\GitExtensions.PluginManager*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Get-ChildItem .\artifacts\GitExtensions.PluginManager*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
         Exit-AppVeyorBuild
         return
     }
     else {
         Write-Host "[INFO]: Prepare combined artifact for signing on release branch"
         Write-Host "Creating combined build artifact ..."
-        $nupkg = (Resolve-Path .\GitExtensions.PluginManager*.nupkg)[0].Path;
-        $zip = (Resolve-Path .\GitExtensions.PluginManager*.zip)[0].Path;
+        $nupkg = (Resolve-Path .\artifacts\GitExtensions.PluginManager*.nupkg)[0].Path;
+        $zip = (Resolve-Path .\artifacts\GitExtensions.PluginManager*.zip)[0].Path;
         $combined = ".\GitExtensions.PluginManager.$($env:APPVEYOR_BUILD_VERSION)$($env:version_suffix).combined-unsigned.zip"
         Compress-Archive -LiteralPath $nupkg, $zip -CompressionLevel NoCompression -DestinationPath $combined -Force
     }
@@ -69,9 +96,12 @@ after_test:
 
 artifacts:
 - path: .\GitExtensions.PluginManager.*.combined-unsigned.zip
+- path: .\artifacts\logs\*.binlog
+
+
 
 #---------------------------------#
-#     deployment configuration    #
+#      artifacts deployment       #
 #---------------------------------#
 
 deploy:
@@ -85,3 +115,24 @@ deploy:
   method: POST
   authorization:
      secure: IlLI/MbhdzmXF/WB2G84zYsDWePXJqHBWDb1zBPxxXvGgx0WRxzMZxuBsvCOcZvbPTRF+UcGp0d5/HT8xZUEjA==
+
+
+# on build failure
+on_failure:
+- ps: |
+    Get-ChildItem -recurse artifacts\Release\TestsResults\*.trx -ErrorAction SilentlyContinue `
+    | ForEach-Object {
+        Push-AppveyorArtifact "$_"
+    }
+- ps: |
+    Get-ChildItem -recurse artifacts\Release\TestsResults\*.trx | `
+        ForEach-Object {
+            $file = $_.FullName.Replace('[', '``[').Replace(']', '``]')
+            #Write-Output "Processing $file"
+
+            [xml]$xml = Get-Content -Path $file
+            $xml.TestRun.Results.UnitTestResult | Where-Object outcome -eq 'Failed' | ForEach-Object {
+                $errorMessage = "$($_.Output.ErrorInfo.Message)`r`n$($_.Output.ErrorInfo.StackTrace)`r`n"
+                Write-Host $errorMessage -ForegroundColor Red
+            }
+        }

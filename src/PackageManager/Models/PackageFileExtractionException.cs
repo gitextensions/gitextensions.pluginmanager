@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Models
 {
     /// <summary>
     /// An exception raised when there was an extracting file from package content.
     /// </summary>
-    [Serializable]
     public class PackageFileExtractionException : Exception
     {
         /// <summary>
@@ -28,14 +22,5 @@ namespace PackageManager.Models
         {
             FilePath = filePath;
         }
-
-        /// <summary>
-        /// Creates a new instance for deserialization.
-        /// </summary>
-        /// <param name="info">The serialization info.</param>
-        /// <param name="context">The streaming context.</param>
-        protected PackageFileExtractionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
     }
 }

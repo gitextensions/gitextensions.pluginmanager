@@ -6,12 +6,24 @@
     <RootNamespace>PackageManager</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup> 
-    <PackageReference Include="Microsoft.NET.Test.Sdk" IsImplicitlyDefined="true" />
-    <PackageReference Include="Moq" IsImplicitlyDefined="true" />
-    <PackageReference Include="MSTest.TestAdapter" IsImplicitlyDefined="true" />
-    <PackageReference Include="MSTest.TestFramework" IsImplicitlyDefined="true" />
-    <PackageReference Include="Appveyor.TestLogger" IsImplicitlyDefined="true" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(IsPerformanceTestProject)' == ''">
+    <IsPerformanceTestProject>false</IsPerformanceTestProject>
+    <IsPerformanceTestProject Condition="$(MSBuildProjectName.EndsWith('.PerformanceTests'))">true</IsPerformanceTestProject>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(IsIntegrationTestProject)' == ''">
+    <IsIntegrationTestProject>false</IsIntegrationTestProject>
+    <IsIntegrationTestProject Condition="$(MSBuildProjectName.EndsWith('.IntegrationTests'))">true</IsIntegrationTestProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsUnitTestProject)' == ''">
+    <IsUnitTestProject>false</IsUnitTestProject>
+    <IsUnitTestProject Condition="$(MSBuildProjectName.EndsWith('.UnitTests')) or $(MSBuildProjectName.EndsWith('.Tests'))">true</IsUnitTestProject>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
+    <IsTestProject Condition="'$(IsUnitTestProject)' == 'true' or '$(IsIntegrationTestProject)' == 'true' or '$(IsPerformanceTestProject)' == 'true'">true</IsTestProject>
+  </PropertyGroup>
 
 </Project>

@@ -1,10 +1,6 @@
 ﻿using Neptuo;
 using Neptuo.Logging;
 using NuGet.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LogLevel = Neptuo.Logging.LogLevel;
 using NuGetLogLevel = NuGet.Common.LogLevel;

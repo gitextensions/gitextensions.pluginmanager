@@ -1,24 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(MSBuildProjectDirectory)\Project.Publish.targets" />
 
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <Description>NuGet-based Plugin Manager for Git Extensions</Description>
     <PackageTags>GitExtensions</PackageTags>
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageManagerTargetPath>PackageManager\PackageManager.UI.exe</PackageManagerTargetPath>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageManagerSourcePath>..\PackageManager.UI\bin\$(Configuration)\$(TargetFramework)\publish\PackageManager.UI.exe</PackageManagerSourcePath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GitExtensions.Extensibility" />
-    <PackageReference Include="System.ComponentModel.Composition" />
+    <PackageReference Include="Microsoft.VisualStudio.Composition" />
     <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
@@ -27,14 +24,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GitUI">
-      <HintPath>$(GitExtensionsPath)\GitUI.dll</HintPath>
+    <None Include="GitExtensions.PluginManager.csproj.user" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GitExtensions.Extensibility">
+      <HintPath>$(GitExtensionsPath)\GitExtensions.Extensibility.dll</HintPath>
     </Reference>
     <Reference Include="GitUIPluginInterfaces">
       <HintPath>$(GitExtensionsPath)\GitUIPluginInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ResourceManager">
-      <HintPath>$(GitExtensionsPath)\ResourceManager.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -53,38 +51,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <Target Name="CopyPackageManager" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(TargetDir)$(PackageManagerTargetPath)" />
-    <Copy SourceFiles="$(PackageManagerSourcePath)" DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(PackageManagerTargetPath)" />
-  </Target>
 
   <Target Name="PreClean" BeforeTargets="Clean">
     <Message Text="Deleting PackageManager" Importance="high" />
     <Delete Files="$(TargetDir)$(PackageManagerTargetPath)" ContinueOnError="true" />
   </Target>
 
-  <Target Name="SetPackageProperties" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <NuspecProperties>
-        id=$(PackageId);
-        version=$(PackageVersion);
-        configuration=$(Configuration);
-        tags=$(PackageTags.Replace(';',' '));
-        projectUrl=$(PackageProjectUrl);
-        iconUrl=$(PackageIconUrl);
-        repositoryUrl=$(RepositoryUrl);
-        repositoryType=$(RepositoryType);
-        repositoryCommit=$(RepositoryCommit);
-        author=$(Authors);
-        copyright=$(Copyright);
-        description=$(Description);
-        targetDir=$(TargetDir);
-      </NuspecProperties>
-    </PropertyGroup>
-  </Target>
-  
-  <Target Name="Zip" AfterTargets="Pack">
-    <Exec Command="powershell -ExecutionPolicy Unrestricted $(MSBuildProjectDirectory)\..\..\tools\Zip-GitExtensionsPlugin.ps1 -Version $(PackageVersion) -Configuration $(Configuration)" />
-  </Target>
 </Project>
