@@ -13,9 +13,6 @@ Nightly builds of PluginManager available at Appveyor - https://ci.appveyor.com/
 ### Browsing for packages
 PluginManager integrated into Git Extensions filters packages with dependency on `GitExtensions.Extensibility`. This package is right now a kind of meta package and it is used to mark nuget packages intended as Git Extensions plugins.
 
-We are heading to use the official nuget.org feed to distribute plugin packages, but there is a bug (#67) which prevents us from using it. 
-Right now it is recommended to use https://www.myget.org/F/neptuo-gitextensions/api/v2.
-
 ### Command line arguments
 PluginManager is designed to be a reusable tool to manage plugins distributed as nuget packages. This repository contains an integration package for Git Extensins.
 As a standalone application, PluginManager supports these command line arguments:
