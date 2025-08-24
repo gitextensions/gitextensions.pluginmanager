@@ -4,6 +4,7 @@
   <PropertyGroup>
     <!-- To support GitExtensions.Extensibility 0.3.*, see https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1011 -->
     <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <!-- Solution dependencies -->
