@@ -21,7 +21,11 @@ As a standalone application, PluginManager supports these command line arguments
 - `--selfpackageid` (optional) - A package id to indicate which package should be treated as a package for self update. 
 - `--dependencies` (optional) - A comma separated list of package ids and versions that are required in package to be compatible (Eg. `GitExtensions.Extensibility-v3.0,TestA,TestB-v1`).
 - `--monikers` (optional) - A comma separated list of .NET framework monikers to filter package content during extraction (Eg. `net461,netstandard2.0`).
-- `--processnamestokillbeforechange` - A comma separated list of process names to be killed before any changes being processed (it is used to kill all instances on Git Extensions before installing/uninstalling dlls, that might be locked). 
+- `--processnamestokillbeforechange` - A comma separated list of process names to be killed before any changes being processed (it is used to kill all instances on Git Extensions before installing/uninstalling dlls, that might be locked).
+
+### Binding between GitExtensions.PluginManager and GitExtensions.Extensibility
+
+The plugin defines a required dependency on `GitExtensions.Extensibility` (see [Plugin.cs#L55](https://github.com/gitextensions/gitextensions.pluginmanager/blob/master/src/GitExtensions.PluginManager/Plugin.cs#L55)) which filters out packages that are not meant as plugins for Git Extensions. The idea is that by selecting minimal version, we limit plugins targeting a specific Git Extensions version. Each version of Git Extensions that is not compatible with the previous one in terms of plugins, should increment a Major version (before we stabilize GitExtensions.Extensibility, we are incrementing Minor version).
 
 ### Icons
 
