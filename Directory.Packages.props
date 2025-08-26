@@ -11,6 +11,7 @@
   <!-- Solution dependencies -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.VisualStudio.Composition" Version="17.2.41" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.4.27" />
     <PackageVersion Include="GitExtensions.Extensibility" Version="0.4.*" />
     <PackageVersion Include="Neptuo" Version="6.0.2" />
     <PackageVersion Include="Neptuo.Exceptions" Version="1.2.2" />
