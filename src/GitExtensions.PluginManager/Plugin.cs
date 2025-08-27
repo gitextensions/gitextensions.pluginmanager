@@ -7,7 +7,7 @@ using PackageManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
+using System.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -23,7 +23,7 @@ namespace GitExtensions.PluginManager
         public const string PackageId = @"GitExtensions.PluginManager";
         public const string GitExtensionsRelativePath = @"GitExtensions.exe";
         public const string PluginManagerRelativePath = @"PackageManager\PackageManager.UI.exe";
-        public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "net6.0", "net7.0", "net8.0", "any", "netstandard2.0" };
+        public static readonly List<string> FrameworkMonikers = new List<string>() { "net5.0", "net6.0", "net7.0", "net8.0", "net9.0", "any", "netstandard2.0" };
 
         internal PluginSettings Configuration { get; private set; }
 
@@ -52,7 +52,7 @@ namespace GitExtensions.PluginManager
 
             Args args = new Args();
             args.Path = pluginsPath;
-            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "0.3.0") };
+            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "0.4.0") };
             args.Tags = "GitExtensions";
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
