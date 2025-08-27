@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <!-- To support GitExtensions.Extensibility 0.3.*, see https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1011 -->
+    <!-- To support GitExtensions.Extensibility (eg. 0.3.*), see https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu1011 -->
     <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NoWarn>$(NoWarn);NU1602;NU1604;NU1701</NoWarn>
@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageVersion Include="Microsoft.VisualStudio.Composition" Version="17.2.41" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="17.13.61" />
-    <PackageVersion Include="GitExtensions.Extensibility" Version="0.4.0.111" />
+    <PackageVersion Include="GitExtensions.Extensibility" Version="0.4.*" />
     <PackageVersion Include="Neptuo" Version="6.0.2" />
     <PackageVersion Include="Neptuo.Exceptions" Version="1.2.2" />
     <PackageVersion Include="Neptuo.Observables" Version="2.1.1" />
