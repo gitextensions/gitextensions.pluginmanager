@@ -9,13 +9,14 @@
     <PackageProjectUrl>https://github.com/gitextensions/gitextensions.pluginmanager</PackageProjectUrl>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
-    <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128</NoWarn>
+    <NoWarn>1701;1702;NU5100;NU5101;NU5103;NU5128;NU1604;NU1701</NoWarn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GitExtensions.Extensibility" />
     <PackageReference Include="Microsoft.VisualStudio.Composition" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" />
     <PackageReference Include="System.Resources.Extensions" />
   </ItemGroup>
 
