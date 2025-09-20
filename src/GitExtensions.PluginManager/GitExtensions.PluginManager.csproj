@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="GitExtensions.PluginManager.csproj.user" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="GitExtensions.Extensibility">
       <HintPath>$(GitExtensionsPath)\GitExtensions.Extensibility.dll</HintPath>
     </Reference>

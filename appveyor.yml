@@ -1,5 +1,5 @@
 # version format
-version: 3.1.0.{build}
+version: 3.1.1.{build}
 
 matrix:
   fast_finish: true
@@ -71,14 +71,49 @@ test_script:
     dotnet test -c Release --no-restore --no-build --nologo --verbosity q --test-adapter-path:. --logger:Appveyor --logger:trx /bl:.\artifacts\logs\tests.binlog
     if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
+after_test:
+- ps: |
+    # do not sign artifacts for PR to release branches, publish dev builds instead
+    if (!$env:APPVEYOR_REPO_BRANCH.StartsWith("release/") -or $env:APPVEYOR_PULL_REQUEST_TITLE) {
+        Write-Host "[INFO]: Do not sign artifacts from PR to release branch"
+        Get-ChildItem .\artifacts\GitExtensions.PluginManager*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Get-ChildItem .\artifacts\GitExtensions.PluginManager*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+        Exit-AppVeyorBuild
+        return
+    }
+    else {
+        Write-Host "[INFO]: Prepare combined artifact for signing on release branch"
+        Write-Host "Creating combined build artifact ..."
+        $nupkg = (Resolve-Path .\artifacts\GitExtensions.PluginManager*.nupkg)[0].Path;
+        $zip = (Resolve-Path .\artifacts\GitExtensions.PluginManager*.zip)[0].Path;
+        $combined = ".\GitExtensions.PluginManager.$($env:APPVEYOR_BUILD_VERSION)$($env:version_suffix).combined-unsigned.zip"
+        Compress-Archive -LiteralPath $nupkg, $zip -CompressionLevel NoCompression -DestinationPath $combined -Force
+    }
+
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 
 artifacts:
-- path: .\artifacts\GitExtensions.PluginManager.*.zip
-- path: .\artifacts\GitExtensions.PluginManager.*.nupkg
+- path: .\GitExtensions.PluginManager.*.combined-unsigned.zip
 - path: .\artifacts\logs\*.binlog
+
+
+#---------------------------------#
+#      artifacts deployment       #
+#---------------------------------#
+
+deploy:
+- provider: Webhook
+  on:
+    ARTIFACT_SIGNING_ENABLED: true
+  url: https://app.signpath.io/API/v1/7c19b2cf-90f7-4d15-9b12-1b615f7c18c4/Integrations/AppVeyor?ProjectKey=gitextensions.pluginmanager&SigningPolicyKey=release-signing
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
+  method: POST
+  authorization:
+     secure: IlLI/MbhdzmXF/WB2G84zYsDWePXJqHBWDb1zBPxxXvGgx0WRxzMZxuBsvCOcZvbPTRF+UcGp0d5/HT8xZUEjA==
 
 
 # on build failure
