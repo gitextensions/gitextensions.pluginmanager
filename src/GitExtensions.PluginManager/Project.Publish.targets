@@ -13,17 +13,27 @@
     -->
   <Target Name="_CopyPackageManager">
     <PropertyGroup>
-      <_PackageManagerSourcePath>$([MSBuild]::NormalizePath('$(RepoRoot)', 'src', 'PackageManager.UI', 'bin', '$(Configuration)', '$(TargetFramework)', '$(PackageManagerUIRuntimeIdentifier)', 'publish', 'PackageManager.UI.exe'))</_PackageManagerSourcePath>
-      <_PackageManagerTargetPath>$(_PackageManagerFolder)\PackageManager.UI.exe</_PackageManagerTargetPath>
+      <!-- Determine where PackageManager.UI.exe and PackageManager.UI.runtimeconfig.json files are -->
+      <_PackageManagerSourceDir>$([MSBuild]::NormalizePath('$(RepoRoot)', 'src', 'PackageManager.UI', 'bin', '$(Configuration)', '$(TargetFramework)', '$(PackageManagerUIRuntimeIdentifier)', 'publish'))</_PackageManagerSourceDir>
+      <_PackageManagerSourcePath>$([MSBuild]::NormalizePath('$(_PackageManagerSourceDir)', 'PackageManager.UI.exe'))</_PackageManagerSourcePath>
+      <_PackageManagerRuntimeConfigSourcePath>$([MSBuild]::NormalizePath('$(_PackageManagerSourceDir)', '..', 'PackageManager.UI.runtimeconfig.json'))</_PackageManagerRuntimeConfigSourcePath>
+
+      <!-- Determine where PackageManager.UI.exe and PackageManager.UI.runtimeconfig.json files need to be copied to -->
+      <_PackageManagerTargetPath>$(_PackageManagerFolder)/PackageManager.UI.exe</_PackageManagerTargetPath>
+      <_PackageManagerRuntimeConfigTargetPath>$(_PackageManagerFolder)/PackageManager.UI.runtimeconfig.json</_PackageManagerRuntimeConfigTargetPath>
     </PropertyGroup>
 
     <!-- Copying to we can pack it -->
     <Copy SourceFiles="$(_PackageManagerSourcePath)"
           DestinationFiles="$(TargetDir)$(_PackageManagerTargetPath)" />
+    <Copy SourceFiles="$(_PackageManagerRuntimeConfigSourcePath)"
+          DestinationFiles="$(TargetDir)$(_PackageManagerRuntimeConfigTargetPath)" />
 
     <!-- Copying to Git Extensions shared installation so we can test it locally -->
     <Copy SourceFiles="$(_PackageManagerSourcePath)"
           DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(_PackageManagerTargetPath)" />
+    <Copy SourceFiles="$(_PackageManagerRuntimeConfigSourcePath)"
+          DestinationFiles="$(GitExtensionsPluginsPath)\$(ProjectName)\$(_PackageManagerRuntimeConfigTargetPath)" />
   </Target>
 
   <!--
