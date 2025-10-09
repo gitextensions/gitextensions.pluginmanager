@@ -45,7 +45,7 @@ install:
 - ps: |
     # Install the required .NET SDK
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
-    ./dotnet-install.ps1 -Channel LTS -InstallDir 'C:\Program Files\dotnet'
+    ./dotnet-install.ps1 -JSonFile ./global.json -InstallDir 'C:\Program Files\dotnet'
     # Remove the script so it doesn't "pollute" the build
     Remove-Item -Path .\dotnet-install.ps1
 
