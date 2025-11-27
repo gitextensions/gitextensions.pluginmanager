@@ -6,7 +6,7 @@
     <NoWarn>$(NoWarn);1573;1591;1712</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-    <PackageManagerUIRuntimeIdentifier>win-x86</PackageManagerUIRuntimeIdentifier>
+    <PackageManagerUIRuntimeIdentifier>win-x64</PackageManagerUIRuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup>
