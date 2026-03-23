@@ -52,7 +52,7 @@ namespace GitExtensions.PluginManager
 
             Args args = new Args();
             args.Path = pluginsPath;
-            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "1.0.0") };
+            args.Dependencies = new List<Args.Dependency>() { new Args.Dependency("GitExtensions.Extensibility", "7.0.0") };
             args.Tags = "GitExtensions";
             args.Monikers = FrameworkMonikers;
             args.SelfPackageId = PackageId;
