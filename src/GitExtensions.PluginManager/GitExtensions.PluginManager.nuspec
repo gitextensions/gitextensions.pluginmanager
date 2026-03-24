@@ -9,14 +9,15 @@
     <tags>$tags$</tags>
     <license type="file">LICENSE.md</license>
     <dependencies>
-      <dependency id="GitExtensions.Extensibility" version="[0.4.0, 0.5.0)" />
+      <dependency id="GitExtensions.Extensibility" version="[7.0.0, 7.1.0)" />
+
     </dependencies>
   </metadata>
   <files>
     <file src="../../LICENSE.md" target="/" />
-    <file src="bin/$configuration$/net9.0-windows/GitExtensions.PluginManager.dll" target="lib/" />
-    <file src="bin/$configuration$/net9.0-windows/PackageManager/PackageManager.UI.exe" target="lib/PackageManager/" />
-    <file src="bin/$configuration$/net9.0-windows/PackageManager.UI.runtimeconfig.json" target="lib/PackageManager/" />
+    <file src="bin/$configuration$/net10.0-windows/GitExtensions.PluginManager.dll" target="lib/" />
+    <file src="bin/$configuration$/net10.0-windows/PackageManager/PackageManager.UI.exe" target="lib/PackageManager/" />
+    <file src="bin/$configuration$/net10.0-windows/PackageManager.UI.runtimeconfig.json" target="lib/PackageManager/" />
   </files>
 
-</package>
+</package>

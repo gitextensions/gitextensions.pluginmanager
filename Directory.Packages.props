@@ -16,7 +16,8 @@
     <PackageVersion Include="Neptuo" Version="6.0.2" />
     <PackageVersion Include="Neptuo.Exceptions" Version="1.2.2" />
     <PackageVersion Include="Neptuo.Observables" Version="2.1.1" />
-    <PackageVersion Include="NuGet.PackageManagement" Version="6.8.0" />
+    <PackageVersion Include="NuGet.Packaging" Version="6.8.1" />
+    <PackageVersion Include="NuGet.PackageManagement" Version="6.8.1" />
     <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 
