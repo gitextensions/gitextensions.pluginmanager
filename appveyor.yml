@@ -1,5 +1,5 @@
 # version format
-version: 7.0.1.{build}
+version: 7.1.0.{build}
 
 matrix:
   fast_finish: true
