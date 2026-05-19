@@ -67,9 +67,29 @@ namespace PackageManager.Models
                 return;
 
             if (source == null)
-                Provider.SaveActivePackageSource(null);
+                ClearActivePackageSource();
             else
                 Provider.SaveActivePackageSource(UnWrap(source));
+        }
+
+        private void ClearActivePackageSource()
+        {
+            if (Provider is not PackageSourceProvider concreteProvider)
+            {
+                return;
+            }
+
+            if (concreteProvider.Settings.GetSection("activePackageSource") is not { } section)
+            {
+                return;
+            }
+
+            foreach (SettingItem item in section.Items)
+            {
+                concreteProvider.Settings.Remove("activePackageSource", item);
+            }
+
+            concreteProvider.Settings.SaveToDisk();
         }
 
         internal void SavePackageSources(bool isOrderChanged = false)
